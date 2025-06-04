@@ -26,78 +26,108 @@
 
 ## 4. Этапы и задачи
 
-### Подготовка
-1. **Инициализировать репозиторий и лицензии** — DevOps, **высокий**, нет зависимостей, 0.5д.
-2. **Настроить базовый CI с линтерами** — DevOps, **высокий**, зависит от задачи 1, 1д.
-3. **Создать структуру каталогов и Docker Compose** — DevOps+Backend, **высокий**, зависит от задачи 1, 1д.
-4. **Настроить code style и pre-commit** — DevOps, **средний**, зависит от задачи 3, 0.5д.
-5. **Спроектировать базу данных и модели** — Backend, **высокий**, 1д.
-6. **Создать начальные миграции** — Backend, **средний**, зависит от задачи 5, 0.5д.
-7. **Прототип интерфейса и каркас страниц** — Frontend, **средний**, 1.5д.
-8. **Подготовить .env.example и документацию** — DevOps, **средний**, 0.5д.
+### Инициализация
+1. **Создать репозиторий и LICENSE** — DevOps, **высокий**, без зависимостей, 0.5д.
+2. **Настроить gitignore и шаблоны коммитов** — DevOps, **высокий**, зависит от 1, 0.5д.
+3. **Сформировать структуру каталогов (backend, frontend, infra, docs)** — DevOps+Архитектор, **высокий**, зависит от 1, 1д.
+4. **Добавить `.env.example` и базовый Docker Compose** — DevOps, **средний**, зависит от 3, 0.5д.
+5. **Запустить базовый CI с линтерами** — DevOps, **высокий**, зависит от 2, 1д.
+6. **Подключить pre-commit с `black`, `isort`, `eslint`, `prettier`** — DevOps, **средний**, зависит от 5, 0.5д.
+7. **Создать шаблоны issue и PR** — DevOps, **низкий**, зависит от 1, 0.5д.
+8. **Подготовить архитектурную схему и ERD** — Архитектор, **высокий**, зависит от 3, 1д.
+9. **Собрать UI-макеты и заготовки документации** — Frontend + Техписатель, **средний**, зависит от 3, 1д.
 
-### Разработка
-9. **Модели и логика Post/Tag** — Backend, **высокий**, зависит от 5, 1д.
-10. **Модель Rating и API голосований** — Backend, **средний**, зависит от 9, 0.5д.
-11. **ShortLink сервис** — Backend, **низкий**, зависит от 9, 0.5д.
-12. **REST API для Post/Tag/Rating/ShortLink** — Backend, **высокий**, зависит от 9-11, 1.5д.
-13. **JWT-авторизация** — Backend, **высокий**, зависит от 3, 0.5д.
-14. **Страницы списка и просмотра постов** — Frontend, **высокий**, зависит от 7 и 12, 1д.
-15. **Страницы тегов и поиска** — Frontend, **средний**, зависит от 12, 1д.
-16. **Интеграция API на фронте** — Frontend, **высокий**, зависит от 12, 1д.
-17. **Компонент рейтинга на страницах** — Frontend, **средний**, зависит от 10, 0.5д.
-18. **Формы логина** — Frontend, **средний**, зависит от 13, 0.5д.
-19. **Celery и Redis для задач и кэша** — Backend, **средний**, зависит от 12, 1д.
-20. **Unit-тесты API и компонентов** — Backend+Frontend, **высокий**, зависит от 12 и 16, 2д.
+### Основная разработка
+10. **Создать базовые модели User, Post, Tag** — Backend, **высокий**, зависит от 8, 1д.
+11. **Добавить модель Rating** — Backend, **средний**, зависит от 10, 0.5д.
+12. **Добавить модель ShortLink** — Backend, **низкий**, зависит от 10, 0.5д.
+13. **Подготовить миграции БД** — Backend, **высокий**, зависит от 10–12, 0.5д.
+14. **API регистрации и логина пользователя** — Backend, **высокий**, зависит от 10, 1д.
+15. **CRUD API для постов** — Backend, **высокий**, зависит от 13, 1д.
+16. **API для тегов** — Backend, **высокий**, зависит от 13, 0.5д.
+17. **API для рейтинга** — Backend, **средний**, зависит от 11 и 13, 0.5д.
+18. **API сервиса ShortLink** — Backend, **низкий**, зависит от 12 и 13, 0.5д.
+19. **Настроить JWT-аутентификацию** — Backend, **высокий**, зависит от 14, 0.5д.
+20. **Интегрировать Celery и Redis** — Backend, **средний**, зависит от 15–18, 1д.
+21. **Сверстать базовые страницы Next.js** — Frontend, **высокий**, зависит от 9 и 15, 1д.
+22. **Сделать страницы тегов и поиска** — Frontend, **средний**, зависит от 16, 1д.
+23. **Сделать страницы логина и регистрации** — Frontend, **средний**, зависит от 14 и 19, 0.5д.
+24. **Интегрировать API на фронтенде** — Frontend, **высокий**, зависит от 15–18 и 19, 1д.
+25. **Компонент рейтинга на фронте** — Frontend, **средний**, зависит от 17 и 24, 0.5д.
+26. **Реализовать редирект по ShortLink** — Frontend, **низкий**, зависит от 18, 0.5д.
+27. **Настроить Tailwind и базовые стили** — Frontend, **средний**, зависит от 21, 0.5д.
+28. **Добавить sitemap и robots для SEO** — Frontend, **низкий**, зависит от 21, 0.5д.
 
 ### Интеграция
-21. **Docker образы и многоконтейнерная среда** — DevOps, **высокий**, зависит от 19, 1д.
-22. **Интеграционные тесты фронта и бэка** — Backend+Frontend, **высокий**, зависит от 21, 1д.
-23. **Sentry и логирование** — DevOps, **средний**, зависит от 21, 0.5д.
-24. **Финальные стили и дизайн** — Frontend, **средний**, зависит от 16, 1д.
+29. **Собрать Docker‑образы для бекенда и фронтенда** — DevOps, **высокий**, зависит от 20–28, 1д.
+30. **Создать docker-compose для разработки и тестов** — DevOps, **высокий**, зависит от 29, 0.5д.
+31. **Настроить Nginx и Gunicorn локально** — DevOps, **высокий**, зависит от 30, 1д.
+32. **Подключить Sentry и систему логирования** — DevOps, **средний**, зависит от 30, 0.5д.
+33. **Unit-тесты backend (pytest)** — Backend, **высокий**, зависит от 15–20, 1д.
+34. **Unit-тесты frontend (Jest)** — Frontend, **высокий**, зависит от 21–27, 1д.
+35. **Интеграционные тесты API и UI** — Backend+Frontend, **высокий**, зависит от 33–34 и 30, 1д.
+36. **GitHub Actions для сборки и тестов** — DevOps, **высокий**, зависит от 35, 1д.
 
-### Деплой
-25. **Сервер в Yandex.Cloud** — DevOps, **высокий**, зависит от 21, 1д.
-26. **Nginx, Gunicorn и HTTPS** — DevOps, **высокий**, зависит от 25, 1д.
-27. **CI/CD pipeline для автодеплоя** — DevOps, **высокий**, зависит от 26, 1д.
-28. **Тестовый релиз и smoke-тесты** — DevOps+Backend+Frontend, **средний**, зависит от 27, 1д.
+### Тестирование
+37. **Нагрузочное тестирование API** — Backend, **средний**, зависит от 35, 0.5д.
+38. **Кроссбраузерное тестирование интерфейса** — Frontend, **средний**, зависит от 35, 0.5д.
+39. **Проверки безопасности** — DevOps, **высокий**, зависит от 36, 0.5д.
+40. **Ручное тестирование и фиксация результатов** — QA+Техписатель, **высокий**, зависит от 37–39, 1д.
 
-### Финализация
-29. **Документация User Guide и API** — Техписатель, **средний**, зависит от 28, 1д.
-30. **Аудит безопасности и релизные заметки** — DevOps+Архитектор, **средний**, зависит от 29, 0.5д.
+### Финализация / запуск
+41. **Развернуть инфраструктуру в Yandex.Cloud** — DevOps, **высокий**, зависит от 36 и 40, 1д.
+42. **Настроить CI/CD pipeline деплоя** — DevOps, **высокий**, зависит от 41, 1д.
+43. **Тестовый релиз и smoke-тесты** — DevOps+Backend+Frontend, **средний**, зависит от 42, 1д.
+44. **Обновить User Guide и API документацию** — Техписатель, **средний**, зависит от 43, 1д.
+45. **Финальный аудит безопасности и публичный релиз** — DevOps+Архитектор, **высокий**, зависит от 44, 1д.
 
 ### Файлы задач
 ```
-tasks/01-init-repo.md
-tasks/02-setup-ci.md
-tasks/03-create-structure.md
-tasks/04-code-style.md
-tasks/05-db-design.md
-tasks/06-initial-migrations.md
-tasks/07-frontend-prototype.md
-tasks/08-env-docs.md
-tasks/09-models-post-tag.md
-tasks/10-rating-model.md
-tasks/11-shortlink.md
-tasks/12-api-core.md
-tasks/13-jwt-auth.md
-tasks/14-post-pages.md
-tasks/15-tags-search-pages.md
-tasks/16-api-integration-frontend.md
-tasks/17-rating-frontend.md
-tasks/18-auth-forms.md
-tasks/19-celery-redis.md
-tasks/20-unit-tests.md
-tasks/21-docker-compose.md
-tasks/22-integration-tests.md
-tasks/23-sentry-logging.md
-tasks/24-final-styles.md
-tasks/25-cloud-server.md
-tasks/26-nginx-gunicorn.md
-tasks/27-cicd-deploy.md
-tasks/28-release-testing.md
-tasks/29-documentation.md
-tasks/30-security-audit.md
+tasks/01-repo-init.md
+tasks/02-git-templates.md
+tasks/03-structure.md
+tasks/04-env-compose.md
+tasks/05-ci-linters.md
+tasks/06-precommit.md
+tasks/07-issue-pr-templates.md
+tasks/08-architecture-erd.md
+tasks/09-ui-mockups.md
+tasks/10-doc-skeletons.md
+tasks/11-models-base.md
+tasks/12-rating-model.md
+tasks/13-shortlink-model.md
+tasks/14-migrations.md
+tasks/15-user-auth-api.md
+tasks/16-posts-api.md
+tasks/17-tags-api.md
+tasks/18-rating-api.md
+tasks/19-shortlink-api.md
+tasks/20-jwt-auth.md
+tasks/21-celery-redis.md
+tasks/22-pages-base.md
+tasks/23-tags-search-pages.md
+tasks/24-auth-pages.md
+tasks/25-api-integration.md
+tasks/26-rating-component.md
+tasks/27-shortlink-redirect.md
+tasks/28-tailwind-styles.md
+tasks/29-seo.md
+tasks/30-docker-images.md
+tasks/31-compose-dev.md
+tasks/32-nginx-gunicorn.md
+tasks/33-sentry-logging.md
+tasks/34-backend-tests.md
+tasks/35-frontend-tests.md
+tasks/36-integration-tests.md
+tasks/37-github-actions.md
+tasks/38-load-testing.md
+tasks/39-crossbrowser-tests.md
+tasks/40-security-tests.md
+tasks/41-manual-tests.md
+tasks/42-cloud-infra.md
+tasks/43-cicd-pipeline.md
+tasks/44-release-testing.md
+tasks/45-final-release.md
 ```
 ## 5. Структура репозитория
 
