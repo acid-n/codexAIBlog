@@ -16,7 +16,7 @@ services:
       - "6379:6379"
   backend:
     build: ../backend
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && gunicorn --bind 0.0.0.0:8000 config.wsgi:application"
     volumes:
       - ../backend:/app
     env_file:
