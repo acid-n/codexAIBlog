@@ -33,10 +33,15 @@ jobs:
           cd backend
           pip install -r requirements.txt
 
+      - name: Install test dependencies
+        run: |
+          cd backend
+          pip install pytest pytest-django pytest-cov
+
       - name: Run backend tests
         run: |
           cd backend
-          pytest -q
+          pytest --cov=. -q
 
       - name: Build Docker images
         run: |

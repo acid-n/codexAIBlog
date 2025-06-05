@@ -81,12 +81,12 @@ Collected files will be served from `/static/` when running the stack.
 
 Codex не выполняет docker-команды напрямую. Для гарантии сборки используется GitHub Actions:
 
-- `.github/workflows/ci.yml` автоматически проверяет:
-  - Dockerfile и docker-compose.yml
-  - Тесты backend через pytest
-  - Успешную сборку образов
+- `.github/workflows/ci.yml` автоматически:
+  - устанавливает зависимости и пакеты `pytest`, `pytest-django`, `pytest-cov`;
+  - запускает `pytest --cov=.` для backend;
+  - проверяет `Dockerfile` и `docker-compose.yml` на успешную сборку образов.
 
-Перед деплоем обязательно убедитесь, что CI пройден без ошибок.
+Если docker недоступен локально, полагайтесь на результаты CI. Перед деплоем обязательно убедитесь, что workflow завершился без ошибок.
 
 ## Contributing
 

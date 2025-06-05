@@ -27,3 +27,8 @@ The backend container started successfully, `collectstatic` completed, and the a
 
 ⚠️ Docker-сборка не была протестирована в Codex (docker недоступен в окружении).
 Пожалуйста, запустите `docker compose -f infra/docker-compose.yml build` локально или проверьте GitHub Actions workflow.
+
+## CI limitations and notes
+
+- Workflow `.github/workflows/ci.yml` устанавливает тестовые зависимости и запускает `pytest --cov=.`.
+- Docker-команды выполняются только в CI или локально при наличии docker.
