@@ -11,6 +11,8 @@
 - Updated `infra/docker-compose.yml` to load environment variables via `env_file` for PostgreSQL.
 - Enhanced CI workflow to install Node.js, run `npm ci` (or `npm install` if no lockfile) and build the frontend, then execute `pytest` from project root.
 - Added `package-lock.json` to repository for deterministic frontend installs.
+- Added `typescript`, `@types/react`, `@types/node` and ESLint packages to frontend `devDependencies`.
+- CI workflow checks `tsc` and `eslint` versions to prevent missing deps.
 
 ## Testing
 
@@ -18,6 +20,7 @@
 - Executed `pytest` for backend tests.
 - Built and started the stack with `docker compose -f infra/docker-compose.yml up --build`.
 - Built the Next.js frontend via `npm run build`.
+- Проверил версии `tsc` и `eslint` после установки зависимостей.
 
 The backend container started successfully, `collectstatic` completed, and the application was available on `http://localhost:8000` (backend) and `http://localhost:3000` (frontend). Static files were served from `/static/`.
 

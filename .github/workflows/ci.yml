@@ -50,6 +50,12 @@ jobs:
             npm install
           fi
 
+      - name: Verify TypeScript packages
+        run: |
+          cd frontend
+          npx tsc --version
+          npx eslint --version
+
       - name: Build frontend
         run: |
           cd frontend
