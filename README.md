@@ -68,6 +68,15 @@ curl -X POST http://localhost:8000/api/v1/ratings/ \
   -d '{"post": 1, "score": 5, "user_hash": "123"}'
 ```
 
+## Static files / collectstatic
+
+The backend uses Django's `collectstatic` command during the Docker build step.
+Static files are collected into the directory defined by the `STATIC_ROOT`
+environment variable (default `/app/static`). Ensure this path exists and is set
+in your `.env` if you override it.
+
+Collected files will be served from `/static/` when running the stack.
+
 ## Contributing
 
 Contributions are welcome! Please read `AGENTS.md` and follow the coding style guidelines. Run `pre-commit` and tests before opening a pull request.
