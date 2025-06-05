@@ -23,3 +23,10 @@ repos:
     hooks:
       - id: prettier
         files: \.(js|jsx|ts|tsx|json|css|md)$
+  - repo: local
+    hooks:
+      - id: run-tests
+        name: Run backend and frontend tests
+        entry: bash -c 'pytest --cov=backend/blog && cd frontend && npm test -- --coverage'
+        language: system
+        pass_filenames: false

@@ -63,7 +63,12 @@ jobs:
 
       - name: Run backend tests
         run: |
-          pytest --cov=. -q
+          pytest --cov=backend/blog -q
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm test -- --coverage
 
       - name: Build Docker images
         run: |
