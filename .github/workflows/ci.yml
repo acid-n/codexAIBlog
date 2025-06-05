@@ -28,19 +28,41 @@ jobs:
         with:
           python-version: 3.12
 
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
       - name: Install dependencies
         run: |
-          cd backend
-          pip install -r requirements.txt
+          pip install -r backend/requirements.txt
 
       - name: Install test dependencies
         run: |
-          cd backend
           pip install pytest pytest-django pytest-cov
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
+
+      - name: Verify TypeScript packages
+        run: |
+          cd frontend
+          npx tsc --version
+          npx eslint --version
+
+      - name: Build frontend
+        run: |
+          cd frontend
+          npm run build
 
       - name: Run backend tests
         run: |
-          cd backend
           pytest --cov=. -q
 
       - name: Build Docker images

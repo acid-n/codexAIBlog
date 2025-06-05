@@ -7,12 +7,20 @@
 - Adjusted `backend/Dockerfile` to set `STATIC_ROOT`, create the directory and run `collectstatic`.
 - Documented static files handling in `README.md`.
 - Updated `CHANGELOG.md` accordingly.
+- Added `Pillow` to backend requirements for `ImageField` support.
+- Updated `infra/docker-compose.yml` to load environment variables via `env_file` for PostgreSQL.
+- Enhanced CI workflow to install Node.js, run `npm ci` (or `npm install` if no lockfile) and build the frontend, then execute `pytest` from project root.
+- Added `package-lock.json` to repository for deterministic frontend installs.
+- Added `typescript`, `@types/react`, `@types/node` and ESLint packages to frontend `devDependencies`.
+- CI workflow checks `tsc` and `eslint` versions to prevent missing deps.
 
 ## Testing
 
 - Ran `pre-commit` on modified files.
 - Executed `pytest` for backend tests.
 - Built and started the stack with `docker compose -f infra/docker-compose.yml up --build`.
+- Built the Next.js frontend via `npm run build`.
+- Проверил версии `tsc` и `eslint` после установки зависимостей.
 
 The backend container started successfully, `collectstatic` completed, and the application was available on `http://localhost:8000` (backend) and `http://localhost:3000` (frontend). Static files were served from `/static/`.
 
@@ -31,4 +39,5 @@ The backend container started successfully, `collectstatic` completed, and the a
 ## CI limitations and notes
 
 - Workflow `.github/workflows/ci.yml` устанавливает тестовые зависимости и запускает `pytest --cov=.`.
+- Зависимости фронтенда ставятся через `npm ci` или `npm install`, после чего выполняется `npm run build`.
 - Docker-команды выполняются только в CI или локально при наличии docker.
