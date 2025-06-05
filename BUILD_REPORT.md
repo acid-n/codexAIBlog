@@ -9,7 +9,8 @@
 - Updated `CHANGELOG.md` accordingly.
 - Added `Pillow` to backend requirements for `ImageField` support.
 - Updated `infra/docker-compose.yml` to load environment variables via `env_file` for PostgreSQL.
-- Enhanced CI workflow to install Node.js, run `npm ci && npm run build`, and execute `pytest` from project root.
+- Enhanced CI workflow to install Node.js, run `npm ci` (or `npm install` if no lockfile) and build the frontend, then execute `pytest` from project root.
+- Added `package-lock.json` to repository for deterministic frontend installs.
 
 ## Testing
 
@@ -35,5 +36,5 @@ The backend container started successfully, `collectstatic` completed, and the a
 ## CI limitations and notes
 
 - Workflow `.github/workflows/ci.yml` устанавливает тестовые зависимости и запускает `pytest --cov=.`.
-- Также устанавливаются Node.js зависимости и выполняется `npm run build` для фронтенда.
+- Зависимости фронтенда ставятся через `npm ci` или `npm install`, после чего выполняется `npm run build`.
 - Docker-команды выполняются только в CI или локально при наличии docker.

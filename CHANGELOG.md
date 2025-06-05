@@ -11,10 +11,12 @@ This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 - Starter change log.
 - `STATIC_ROOT` setting with default `/app/static` and documentation on collecting static files.
 - GitHub Actions workflow installs test requirements and runs `pytest --cov=.`.
+- `package-lock.json` for deterministic frontend builds.
 
 ### Changed
 
 - Updated README and BUILD_REPORT with CI usage notes and limitations.
+- CI installs frontend dependencies with `npm ci` when lock file is present.
 
 ## [v0.1.0] - 2024-08-09
 
