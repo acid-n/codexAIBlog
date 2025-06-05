@@ -48,3 +48,12 @@
 - [Документация React](https://react.dev/)
 - [Руководства по Docker и DevOps](https://docs.docker.com/)
 - [Руководство GitHub Actions](https://docs.github.com/en/actions)
+
+### Ограничения среды Codex
+
+Codex не может выполнять команды `docker` и `docker compose`, но обязан:
+
+- Генерировать корректные `Dockerfile`, `docker-compose.yml`, `.env` и прочие конфигурации
+- Проверять конфигурации синтаксически
+- Отмечать в `BUILD_REPORT.md`, что docker-тесты требуют локального или CI-подтверждения
+- Не имитировать запуск docker-команд — только конфигурация и логика
