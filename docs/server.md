@@ -23,7 +23,7 @@
 1. Обновить ОС `sudo apt update && sudo apt upgrade`
 2. Создать sudo-пользователя, включить SSH-ключи, отключить вход по паролю.
 
-### 1. Безопасность  *(ставим прежде всего)*
+### 1. Безопасность  _(ставим прежде всего)_
 
 1. **unattended-upgrades** — автопатчи безопасности ([LFCS Certification eBook][1])
 2. **UFW** (открываем только 22/tcp, 80, 443) ([LFCS Certification eBook][1])
@@ -50,9 +50,9 @@
 
 1. **Supervisor** — сервисы:
 
-   * `gunicorn-noeon` (Django)
-   * `nextjs-noeon` (если SSR без контейнера)
-   * `celery-noeon` + `celerybeat` ([DigitalOcean][7])
+   - `gunicorn-noeon` (Django)
+   - `nextjs-noeon` (если SSR без контейнера)
+   - `celery-noeon` + `celerybeat` ([DigitalOcean][7])
 
 ### 6. HTTP-layer
 
@@ -69,7 +69,7 @@
 ### 8. CI/CD
 
 1. Создать репозиторий в **SourceCraft** ([Telecompaper][9])
-2. Пайплайн: тесты → build Docker-образов → push → SSH-deploy /  docker-compose up (или Yandex Cloud Registry).
+2. Пайплайн: тесты → build Docker-образов → push → SSH-deploy / docker-compose up (или Yandex Cloud Registry).
 3. Подключить **Sentry** для прод-отслеживания ошибок ([Parsers VC][10])
 
 ### 9. Бэкапы
@@ -79,4 +79,5 @@
 ---
 
 ## Что ещё можно добавить (опционально)
-**Watchtower** авто-обновление Docker-контейнеров                                 
+
+**Watchtower** авто-обновление Docker-контейнеров
