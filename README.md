@@ -77,6 +77,17 @@ in your `.env` if you override it.
 
 Collected files will be served from `/static/` when running the stack.
 
+## Docker & CI
+
+Codex не выполняет docker-команды напрямую. Для гарантии сборки используется GitHub Actions:
+
+- `.github/workflows/ci.yml` автоматически:
+  - устанавливает зависимости и пакеты `pytest`, `pytest-django`, `pytest-cov`;
+  - запускает `pytest --cov=.` для backend;
+  - проверяет `Dockerfile` и `docker-compose.yml` на успешную сборку образов.
+
+Если docker недоступен локально, полагайтесь на результаты CI. Перед деплоем обязательно убедитесь, что workflow завершился без ошибок.
+
 ## Contributing
 
 Contributions are welcome! Please read `AGENTS.md` and follow the coding style guidelines. Run `pre-commit` and tests before opening a pull request.

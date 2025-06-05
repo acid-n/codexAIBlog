@@ -24,3 +24,11 @@ The backend container started successfully, `collectstatic` completed, and the a
    docker compose -f infra/docker-compose.yml up --build
    ```
    The images will be built and services started.
+
+⚠️ Docker-сборка не была протестирована в Codex (docker недоступен в окружении).
+Пожалуйста, запустите `docker compose -f infra/docker-compose.yml build` локально или проверьте GitHub Actions workflow.
+
+## CI limitations and notes
+
+- Workflow `.github/workflows/ci.yml` устанавливает тестовые зависимости и запускает `pytest --cov=.`.
+- Docker-команды выполняются только в CI или локально при наличии docker.
