@@ -13,6 +13,7 @@ POST /api/token/
 ```
 
 **Тело запроса:**
+
 ```json
 {
   "username": "ваш_логин",
@@ -21,6 +22,7 @@ POST /api/token/
 ```
 
 **Ответ:**
+
 ```json
 {
   "access": "ваш_access_токен",
@@ -35,6 +37,7 @@ POST /api/token/refresh/
 ```
 
 **Тело запроса:**
+
 ```json
 {
   "refresh": "ваш_refresh_токен"
@@ -52,6 +55,7 @@ GET /api/v1/posts/
 ```
 
 Поддерживаемые параметры:
+
 - `page` - номер страницы (пагинация)
 - `status` - статус постов (published, draft)
 - `tag` - фильтр по тегу
@@ -106,6 +110,7 @@ POST /api/v1/ratings/
 ```
 
 **Тело запроса:**
+
 ```json
 {
   "post": 1,
@@ -129,6 +134,7 @@ POST /api/v1/contact/
 ```
 
 **Тело запроса:**
+
 ```json
 {
   "name": "Имя отправителя",
@@ -147,10 +153,11 @@ POST /api/v1/analytics/
 ```
 
 **Тело запроса:**
+
 ```json
 {
   "event_type": "тип_события",
-  "event_data": {"ключ": "значение"},
+  "event_data": { "ключ": "значение" },
   "page_url": "/путь/страницы",
   "session_id": "идентификатор_сессии"
 }
