@@ -27,3 +27,7 @@ class BlogModelTests(TestCase):
     def test_shortlink_redirect(self):
         short = ShortLink.objects.create(post=self.post, code="abc")
         self.assertEqual(short.get_redirect_url(), f"/posts/{self.post.slug}/")
+
+    def test_str_methods(self):
+        self.assertEqual(str(self.tag), "Test")
+        self.assertEqual(str(self.post), "Hello")
