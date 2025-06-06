@@ -1,83 +1,78 @@
 # Musson Blog
 
-This repository contains the source code for **Musson** – a headless blog powered by Django and Next.js.
+Репозиторий содержит исходный код **Musson** — безголовой блог-платформы на Django и Next.js.
 
-## Quick start
+## Быстрый старт
 
-1. Copy `.env.example` to `.env` and adjust values if needed.
-2. Build and start the stack:
+1. Скопируйте `.env.example` в `.env` и при необходимости измените значения.
+2. Соберите и запустите окружение:
+   ```bash
+   cd infra
+   docker compose up --build
+   ```
+   Бэкенд будет доступен на `http://localhost:8000`, фронтенд — на `http://localhost:3000`.
 
-```bash
-cd infra
-docker compose up --build
-```
+Современная headless-платформа блога на **Django** и **Next.js**.
 
-The backend will be available on `http://localhost:8000`, frontend on `http://localhost:3000`.
+## Возможности
 
-A modern headless blogging platform powered by **Django** and **Next.js**.
+- REST API на базе Django REST Framework
+- Фронтенд SSR/SSG на Next.js и Tailwind CSS
+- Рейтинги пользователей и навигация по тегам
+- Сервис коротких ссылок для обмена постами
+- Разработка в Docker-окружении
 
-## Features
+## Полезные ссылки
 
-- REST API built with Django REST Framework
-- SSR/SSG frontend using Next.js and Tailwind CSS
-- User ratings and tag navigation
-- Short link service for sharing posts
-- Dockerized development environment
+- [Технический обзор](docs/TECHNICAL_OVERVIEW.md)
+- [Описание API](docs/API_REFERENCE.md)
+- [Руководство пользователя](docs/USER_GUIDE.md)
+- [Руководство разработчика](docs/DEV_GUIDE.md)
 
-## Quick Links
-
-- [Technical Overview](docs/TECHNICAL_OVERVIEW.md)
-- [API Reference](docs/API_REFERENCE.md)
-- [User Guide](docs/USER_GUIDE.md)
-- [Developer Guide](docs/DEV_GUIDE.md)
-
-## Technology Stack
+## Технологии
 
 - Python 3.11, Django 5, Django REST Framework
 - Next.js 13+, React, TypeScript
 - PostgreSQL, Redis
 - Docker, Docker Compose, GitHub Actions
 
-## Repository Structure
+## Структура репозитория
 
 ```
-backend/   # Django project
-frontend/  # Next.js app
-infra/     # docker-compose and deployment files
-docs/      # documentation
+backend/   # проект Django
+frontend/  # приложение Next.js
+infra/     # docker-compose и файлы деплоя
+docs/      # документация
 ```
 
-## Local Installation
+## Локальная установка
 
-1. Clone the repository and copy `.env.example` to `.env`.
-2. Build and run services with Docker:
+1. Клонируйте репозиторий и скопируйте `.env.example` в `.env`.
+2. Соберите и запустите сервисы через Docker:
    ```bash
    docker-compose -f infra/docker-compose.yml up --build
    ```
-3. Visit `http://localhost:3000` for the frontend and `http://localhost:8000` for the backend API.
+3. Перейдите на `http://localhost:3000` для фронтенда и `http://localhost:8000` для API бэкенда.
 
-## Example Usage
+## Пример использования
 
 ```bash
-# Fetch posts via API
+# Получить список постов
 curl http://localhost:8000/api/v1/posts/
 
-# Create a rating
+# Создать рейтинг
 curl -X POST http://localhost:8000/api/v1/ratings/ \
   -H 'Content-Type: application/json' \
   -d '{"post": 1, "score": 5, "user_hash": "123"}'
 ```
 
-## Static files / collectstatic
+## Статические файлы / collectstatic
 
-The backend uses Django's `collectstatic` command during the Docker build step.
-Static files are collected into the directory defined by the `STATIC_ROOT`
-environment variable (default `/app/static`). Ensure this path exists and is set
-in your `.env` if you override it.
+Бэкенд выполняет команду `collectstatic` на этапе сборки Docker. Файлы собираются в каталог, указанный в переменной окружения `STATIC_ROOT` (по умолчанию `/app/static`). Убедитесь, что путь существует и задан в `.env`, если вы его меняете.
 
-Collected files will be served from `/static/` when running the stack.
+Собранные файлы доступны по пути `/static/` при запуске стека.
 
-## Docker & CI
+## Docker и CI
 
 Codex не выполняет docker-команды напрямую. Для гарантии сборки используется GitHub Actions:
 
@@ -85,15 +80,15 @@ Codex не выполняет docker-команды напрямую. Для г�
   - устанавливает зависимости и пакеты `pytest`, `pytest-django`, `pytest-cov`;
   - запускает `pytest --cov=.` для backend;
   - устанавливает зависимости фронтенда через `npm ci` при наличии `package-lock.json`, иначе `npm install`;
-  - проверяет наличие пакетов TypeScript и ESLint для корректной сборки;
-  - запускает сборку фронтенда и тесты бэкенда;
+  - проверяет наличие пакетов TypeScript и ESLint;
+  - собирает фронтенд и запускает тесты бэкенда;
   - только затем строит Docker-образы.
 
-Если docker недоступен локально, полагайтесь на результаты CI. Перед деплоем обязательно убедитесь, что workflow завершился без ошибок.
+Если Docker недоступен локально, ориентируйтесь на результаты CI. Перед деплоем убедитесь, что workflow завершился без ошибок.
 
-## Contributing
+## Участие
 
-Contributions are welcome! Please read `AGENTS.md` and follow the coding style guidelines. Run `pre-commit` and tests before opening a pull request.
+Будем рады pull request'ам! Изучите `AGENTS.md` и придерживайтесь описанного стиля кодирования. Перед PR запустите `pre-commit` и тесты.
 
 ## 🧪 Тестирование
 
@@ -107,11 +102,17 @@ cd frontend && npm test -- --coverage
 
 Полный отчёт о покрытии хранится в файле `COVERAGE_REPORT.md`.
 
-## License
+## Лицензия
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+Проект распространяется под лицензией MIT. Подробности — в файле [LICENSE](LICENSE).
 
 ## Project Automation
 
 - [Tasks](tasks/) — список задач
 - [Reports](reports/) — отчёты и метрики
+
+## Автоматизация Codex
+
+Файлы в каталоге `tasks/` описывают отдельные задачи. Их статусы фиксируются в `STATE.md` (`pending`, `in progress`, `done`). В каталоге `reports/` сохраняются отчёты о сборке и тестах. Codex обновляет эти файлы автоматически при выполнении задач.
+
+Проект полностью русифицирован: вся документация и комментарии переведены на русский язык.

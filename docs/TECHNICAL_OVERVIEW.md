@@ -1,17 +1,17 @@
-# Technical Overview
+# Технический обзор
 
-This document gives an overview of the architecture of **codexAIBlog**. It is intended for developers and DevOps engineers who need to understand how the system is structured and how its components interact.
+Документ описывает архитектуру **codexAIBlog**. Он предназначен для разработчиков и DevOps-инженеров, которым важно понимать структуру системы и взаимодействие её компонентов.
 
-## Architecture
+## Архитектура
 
-The project follows a classic headless architecture with two main services:
+Проект построен по классической headless-модели и состоит из двух сервисов:
 
-- **Backend** – a Django 5 application providing a REST API.
-- **Frontend** – a Next.js application that consumes the API and renders pages using SSR and SSG.
+- **Backend** — приложение Django 5, предоставляющее REST API.
+- **Frontend** — приложение Next.js, обращающееся к API и рендерящее страницы через SSR и SSG.
 
-Both services run in Docker containers and communicate over HTTP. PostgreSQL is used as the primary database and Redis is planned for caching and Celery tasks.
+Оба сервиса работают в Docker-контейнерах и общаются по HTTP. Основная база данных — PostgreSQL. Redis планируется для кэша и задач Celery.
 
-```
+```mermaid
 sequenceDiagram
   participant Browser
   participant Frontend
@@ -25,51 +25,51 @@ sequenceDiagram
   Frontend-->>Browser: HTML/JSON
 ```
 
-### Components
+### Компоненты
 
-- **Django REST API** – exposes endpoints for posts, tags, ratings, short links, analytics and contacts. JWT is used for authentication.
-- **Next.js** – renders the UI, fetches data from the API at build time (SSG) or on demand (SSR) and provides a small CLI for development.
-- **PostgreSQL** – stores all persistent data. The schema is described in `docs/DATABASE_SCHEMA.txt`.
-- **Redis** – used for caching and as a message broker for Celery (not yet implemented in the repository).
-- **Docker & Compose** – local development and deployment run in containers defined in `infra/docker-compose.yml`.
-- **CI/CD** – GitHub Actions builds and pushes images to a registry and can deploy to Yandex Cloud.
+- **Django REST API** — эндпоинты для постов, тегов, рейтингов, коротких ссылок, аналитики и контактов. Для аутентификации используется JWT.
+- **Next.js** — отображает интерфейс, получает данные из API во время сборки (SSG) или по запросу (SSR) и предоставляет CLI для разработки.
+- **PostgreSQL** — хранит данные. Схема описана в `docs/DATABASE_SCHEMA.txt`.
+- **Redis** — используется для кэширования и как брокер Celery (пока не реализован).
+- **Docker и Compose** — локальная разработка и деплой ведутся через `infra/docker-compose.yml`.
+- **CI/CD** — GitHub Actions собирает образы и может развёртывать их в Yandex Cloud.
 
-### Data Models
+### Модели данных
 
-The main models are defined in the Django app `blog`:
+Основные модели определены в приложении `blog`:
 
-- `User` – custom user model with a unique email field.
-- `Post` – blog post containing title, slug, description, JSON body, optional image and publishing metadata.
-- `Tag` – simple tag linked to posts via a many‑to‑many relationship.
-- `Rating` – user rating for a post (1–5 stars) with a unique constraint on `(post, user_hash)`.
-- `ShortLink` – stores a short code for each post and redirects to the full URL.
+- `User` — кастомная модель пользователя с уникальным email.
+- `Post` — запись блога с заголовком, slug, описанием, JSON-телом, необязательным изображением и метаданными публикации.
+- `Tag` — тег, связанный с постами отношением many-to-many.
+- `Rating` — оценка поста (1–5 звёзд) с уникальным ограничением `(post, user_hash)`.
+- `ShortLink` — короткая ссылка на пост.
 
-More detailed model descriptions can be found in `docs/DATA_MODELS.txt` and `docs/DATA_MODELS_DETAIL.txt`.
+Подробности можно найти в `docs/DATA_MODELS.txt` и `docs/DATA_MODELS_DETAIL.txt`.
 
-### Security and Performance
+### Безопасность и производительность
 
-- HTTPS termination and HTTP/2 via Nginx (see `docs/server.md`).
-- JWT tokens for authentication.
-- Dockerized services allow horizontal scaling. PostgreSQL and Redis are external services so the application containers remain stateless.
-- Static files are served by `whitenoise` or directly by Nginx. Next.js generates optimized assets during build.
+- Завершение HTTPS и HTTP/2 через Nginx (см. `docs/server.md`).
+- JWT-токены для аутентификации.
+- Контейнеризация позволяет горизонтально масштабировать сервисы. PostgreSQL и Redis развёрнуты отдельно, поэтому контейнеры приложения остаются stateless.
+- Статические файлы обслуживаются `whitenoise` или Nginx. Next.js генерирует оптимизированные ассеты при сборке.
 
-### Deployment
+### Деплой
 
-The recommended stack for production is documented in `docs/server.md`. It includes Netdata monitoring, UFW/Fail2Ban for security, Gunicorn for Django, and optional Sentry for logging. Docker images are built by CI and can be deployed to Yandex Cloud using `docker-compose` or Kubernetes.
+Рекомендуемый стек описан в `docs/server.md`: мониторинг Netdata, защита UFW/Fail2Ban, Gunicorn для Django и при необходимости Sentry. Образы строятся CI и могут быть развёрнуты в Yandex Cloud с помощью `docker-compose` или Kubernetes.
 
-## Directory Structure
+## Структура каталогов
 
 ```
-backend/   # Django project and apps
-frontend/  # Next.js application
-infra/     # Docker and infrastructure configs
- docs/      # documentation
+backend/   # проект Django и приложения
+frontend/  # приложение Next.js
+infra/     # Docker и инфраструктурные конфиги
+docs/      # документация
 ```
 
-## Database Schema
+## Схема базы данных
 
-ERD and SQL DDL can be found in `docs/DATABASE_SCHEMA.txt`. The models are also visualised in `docs/architecture.md` using Mermaid.
+ERD и SQL DDL находятся в `docs/DATABASE_SCHEMA.txt`. Модели также представлены в `docs/architecture.md` с помощью Mermaid.
 
 ## CI/CD
 
-GitHub Actions is configured to lint the codebase (`pre-commit`) and build Docker images. To enable full deployment, secrets for Yandex Cloud must be configured as described in `docs/audit_recommendations.md`.
+GitHub Actions запускает линтеры (`pre-commit`) и собирает Docker-образы. Для полноценного деплоя добавьте секреты Yandex Cloud, как указано в `docs/audit_recommendations.md`.
