@@ -110,3 +110,8 @@ cd frontend && npm test -- --coverage
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+
+## Project Automation
+
+- [Tasks](tasks/) — список задач
+- [Reports](reports/) — отчёты и метрики
