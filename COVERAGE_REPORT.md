@@ -10,10 +10,10 @@ _______________ coverage: platform linux, python 3.12.10-final-0 _______________
 Name                       Stmts   Miss  Cover   Missing
 --------------------------------------------------------
 backend/blog/__init__.py       0      0   100%
-backend/blog/models.py        43      2    95%   20, 45
+backend/blog/models.py        43      0   100%
 --------------------------------------------------------
-TOTAL                         43      2    95%
-2 passed in 2.72s
+TOTAL                         43      0   100%
+3 passed in 1.57s
 ```
 
 ## Frontend
