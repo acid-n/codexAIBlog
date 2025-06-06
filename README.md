@@ -95,6 +95,18 @@ Codex не выполняет docker-команды напрямую. Для г�
 
 Contributions are welcome! Please read `AGENTS.md` and follow the coding style guidelines. Run `pre-commit` and tests before opening a pull request.
 
+## 🧪 Тестирование
+
+Локально тесты запускаются из корня проекта:
+
+```bash
+pre-commit run --all-files
+pytest --cov=backend/blog
+cd frontend && npm test -- --coverage
+```
+
+Полный отчёт о покрытии хранится в файле `COVERAGE_REPORT.md`.
+
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.

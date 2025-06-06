@@ -1,0 +1,9 @@
+[run]
+source = backend/blog
+omit =
+    */migrations/*
+    */admin.py
+    */apps.py
+
+[report]
+show_missing = True
