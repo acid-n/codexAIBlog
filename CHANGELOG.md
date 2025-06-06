@@ -1,37 +1,37 @@
-# Changelog
+# История изменений
 
-All notable changes to this project will be documented in this file.
-This project adheres to [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+Все значимые изменения этого проекта документируются в этом файле.
+Проект следует рекомендациям [Keep a Changelog](https://keepachangelog.com/ru/1.0.0/).
 
 ## [Unreleased]
 
-### Added
+### Добавлено
 
-- Initial documentation set (`README`, `TECHNICAL_OVERVIEW`, `API_REFERENCE`, `USER_GUIDE`, `DEV_GUIDE`).
-- Starter change log.
-- `STATIC_ROOT` setting with default `/app/static` and documentation on collecting static files.
-- GitHub Actions workflow installs test requirements and runs `pytest --cov=.`.
-- `package-lock.json` for deterministic frontend builds.
-- TypeScript and ESLint packages added for stable Next.js build.
+- Начальный набор документации (`README`, `TECHNICAL_OVERVIEW`, `API_REFERENCE`, `USER_GUIDE`, `DEV_GUIDE`).
+- Стартовый файл истории изменений.
+- Переменная `STATIC_ROOT` со значением по умолчанию `/app/static` и описание сбора статики.
+- Workflow GitHub Actions устанавливает тестовые зависимости и запускает `pytest --cov=.`.
+- `package-lock.json` для детерминированной сборки фронтенда.
+- Пакеты TypeScript и ESLint для стабильной сборки Next.js.
 
-### Changed
+### Изменено
 
-- Updated README and BUILD_REPORT with CI usage notes and limitations.
-- CI installs frontend dependencies with `npm ci` when lock file is present.
-- CI verifies TypeScript and ESLint versions during build.
+- Обновлены README и BUILD_REPORT с описанием CI и ограничений.
+- В CI зависимости фронтенда устанавливаются через `npm ci`, если есть lock-файл.
+- Во время сборки CI проверяет версии TypeScript и ESLint.
 
 ## [v0.1.0] - 2024-08-09
 
-### Added
+### Добавлено
 
-- Base project structure with backend and frontend directories.
-- Docker compose configuration.
-- Example Django models and tests.
+- Базовая структура проекта с директориями backend и frontend.
+- Конфигурация Docker Compose.
+- Пример моделей Django и тестов.
 
-### Changed
+### Изменено
 
-- Integrated pre-commit with Black, isort, flake8, ESLint and Prettier.
+- Интегрирован pre-commit с Black, isort, flake8, ESLint и Prettier.
 
-### Security
+### Безопасность
 
-- Default security settings and instructions in `docs/server.md`.
+- Стандартные настройки безопасности и инструкции в `docs/server.md`.

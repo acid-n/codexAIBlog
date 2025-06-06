@@ -1,5 +1,5 @@
-# Errors
+# Ошибки
 
 ## npm create-next-app
 
-`npx create-next-app` failed in the container due to interactive prompts, so a minimal Next.js structure was created manually.
+Команда `npx create-next-app` не выполнилась в контейнере из-за интерактивных вопросов, поэтому минимальная структура Next.js была создана вручную.

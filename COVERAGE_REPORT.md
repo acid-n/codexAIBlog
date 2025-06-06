@@ -1,4 +1,4 @@
-# Coverage Report
+# Отчёт о покрытии
 
 ## Backend
 

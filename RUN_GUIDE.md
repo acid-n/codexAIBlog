@@ -1,18 +1,18 @@
-# Run Guide
+# Руководство по запуску
 
-This guide explains how to run Musson locally and in production.
+Этот документ объясняет, как запустить Musson локально и в продакшене.
 
-## Local development
+## Локальная разработка
 
-1. Install Docker and Docker Compose.
-2. Copy `.env.example` to `.env`.
-3. Start all services:
+1. Установите Docker и Docker Compose.
+2. Скопируйте `.env.example` в `.env`.
+3. Запустите все сервисы:
 
 ```bash
 cd infra
 docker compose up --build
 ```
 
-## Production
+## Продакшн
 
-Build images and run them on your server. An example compose file is provided in `infra/`.
+Соберите образы и запустите их на своём сервере. Пример compose-файла находится в каталоге `infra/`.

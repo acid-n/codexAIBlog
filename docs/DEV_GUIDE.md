@@ -1,67 +1,67 @@
-# Developer Guide
+# Руководство разработчика
 
-This guide explains how to set up the project locally and how to contribute.
+В этом документе описано, как настроить проект локально и как принимать участие в разработке.
 
-## Requirements
+## Требования
 
-- Docker and Docker Compose
-- Python 3.11 with pip (for running tests outside Docker)
+- Docker и Docker Compose
+- Python 3.11 с pip (для запуска тестов вне Docker)
 - Node.js 18 LTS
 - `pre-commit`
 
-## Running with Docker
+## Запуск в Docker
 
-1. Copy `.env.example` to `.env` and adjust the values.
-2. Start all services:
+1. Скопируйте `.env.example` в `.env` и при необходимости измените значения.
+2. Запустите все сервисы:
    ```bash
    docker-compose -f infra/docker-compose.yml up --build
    ```
-3. The backend will be available at `http://localhost:8000`, the frontend at `http://localhost:3000`.
+3. Бэкенд будет доступен по адресу `http://localhost:8000`, фронтенд — `http://localhost:3000`.
 
-## Local Setup without Docker
+## Локальная установка без Docker
 
-1. Install dependencies for the backend (Django, DRF) and the frontend (Next.js).
-2. Create a virtualenv and run migrations:
+1. Установите зависимости для бэкенда (Django, DRF) и фронтенда (Next.js).
+2. Создайте виртуальное окружение и примените миграции:
    ```bash
    python backend/manage.py migrate
    python backend/manage.py runserver
    ```
-3. In another terminal start the frontend:
+3. В другом терминале запустите фронтенд:
    ```bash
    cd frontend
    npm install
    npm run dev
    ```
 
-## Tests and Linters
+## Тесты и линтеры
 
-- Python tests run with `pytest` inside the `backend` directory.
-- Frontend tests (when added) run with `npm test`.
-- Run `pre-commit run --all-files` before pushing changes.
+- Python-тесты запускаются с помощью `pytest` в каталоге `backend`.
+- Фронтенд-тесты (когда появятся) выполняются командой `npm test`.
+- Перед отправкой изменений запускайте `pre-commit run --all-files`.
 
-## Contributing
+## Внесение изменений
 
-1. Fork the repository and create a feature branch.
-2. Follow the coding standards described in `AGENTS.md` and `PROJECT_PLAN.md`.
-3. Update or add documentation when you change behaviour.
-4. Submit a pull request referencing the relevant task.
+1. Сделайте форк репозитория и создайте ветку для своей функции.
+2. Соблюдайте стандарты кодирования из `AGENTS.md` и `PROJECT_PLAN.md`.
+3. Обновляйте документацию при изменении поведения.
+4. Отправляйте pull request со ссылкой на соответствующую задачу.
 
-## Where to Add Code
+## Где писать код
 
-- **Backend** code lives under `backend/`.
-- **Frontend** code lives under `frontend/`.
-- Infrastructure files are under `infra/`.
-- Documentation resides in `docs/`.
+- **Backend** — каталог `backend/`.
+- **Frontend** — каталог `frontend/`.
+- Инфраструктурные файлы — в `infra/`.
+- Документация — в `docs/`.
 
-## Useful Commands
+## Полезные команды
 
 ```bash
-# Apply migrations
+# Применить миграции
 python backend/manage.py migrate
 
-# Run tests
+# Запустить тесты
 pytest backend
 
-# Format code
+# Отформатировать код
 pre-commit run --all-files
 ```
