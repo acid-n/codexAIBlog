@@ -11,6 +11,8 @@
    docker compose up --build
    ```
    Бэкенд будет доступен на `http://localhost:8000`, фронтенд — на `http://localhost:3000`.
+3. При первом запуске автоматически создаётся суперпользователь `admin`/`admin123`.
+   Зайдите на `http://localhost:8000/admin/` и смените пароль.
 
 Современная headless-платформа блога на **Django** и **Next.js**.
 
@@ -53,6 +55,7 @@ docs/      # документация
    docker-compose -f infra/docker-compose.yml up --build
    ```
 3. Перейдите на `http://localhost:3000` для фронтенда и `http://localhost:8000` для API бэкенда.
+4. Для входа в админку используется пользователь `admin` с паролем `admin123` (создаётся автоматически).
 
 ## Пример использования
 
