@@ -5,4 +5,7 @@ module.exports = {
   globals: {
     "ts-jest": { tsconfig: "tsconfig.jest.json" },
   },
+  moduleNameMapper: {
+    "\\.(css|less|scss)$": "<rootDir>/styleMock.js",
+  },
 };

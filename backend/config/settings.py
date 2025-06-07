@@ -117,8 +117,11 @@ USE_TZ = True
 # Статические файлы (CSS, JavaScript, изображения)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = "static/"
-STATIC_ROOT = os.environ.get("STATIC_ROOT", "/app/static")
+STATIC_URL = "/static/"
+STATIC_ROOT = os.environ.get("STATIC_ROOT", str(BASE_DIR / "static"))
+STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
+
+MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
 
 # Тип первичного ключа по умолчанию
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
