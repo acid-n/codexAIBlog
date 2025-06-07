@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  --font-lora: "Lora", Georgia, serif;
+  --font-coustard: "Coustard", Georgia, serif;
+}

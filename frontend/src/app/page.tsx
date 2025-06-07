@@ -30,18 +30,21 @@ const posts: Post[] = [
 
 export default function Home() {
   return (
-    <main>
-      <h1>Последние статьи</h1>
-      <ul>
+    <section>
+      <h1 className="mb-8 font-heading text-3xl">Последние статьи</h1>
+      <div className="space-y-6">
         {posts.map((post) => (
-          <li key={post.id}>
-            <h2>
+          <article
+            key={post.id}
+            className="rounded border border-gray-200 p-6 transition-shadow hover:shadow-lg"
+          >
+            <h2 className="mb-2 text-xl font-heading transition-colors hover:text-blue-600">
               <Link href={`/posts/${post.slug}`}>{post.title}</Link>
             </h2>
-            <p>{post.description}</p>
-          </li>
+            <p className="text-gray-700">{post.description}</p>
+          </article>
         ))}
-      </ul>
-    </main>
+      </div>
+    </section>
   );
 }
