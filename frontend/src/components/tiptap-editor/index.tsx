@@ -1,7 +1,13 @@
 "use client";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { useEffect } from "react";
+import Image from "@tiptap/extension-image";
+import Link from "@tiptap/extension-link";
+import Underline from "@tiptap/extension-underline";
+import TextAlign from "@tiptap/extension-text-align";
+import { useEffect, useState } from "react";
+import { FaBold, FaItalic, FaImage, FaLink } from "react-icons/fa";
+import ImageUploader from "../image-uploader";
 
 interface Props {
   content: any;
@@ -14,8 +20,15 @@ export default function TiptapEditor({
   onChange,
   editable = true,
 }: Props) {
+  const [showUploader, setShowUploader] = useState(false);
   const editor = useEditor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Underline,
+      Image,
+      Link,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+    ],
     content,
     editable,
     onUpdate({ editor }) {
@@ -29,10 +42,67 @@ export default function TiptapEditor({
     }
   }, [content, editor]);
 
+  if (!editor) return null;
+
+  const insertImage = (url: string) => {
+    editor.chain().focus().setImage({ src: url }).run();
+  };
+
   return (
-    <EditorContent
-      editor={editor}
-      className="border rounded p-2 min-h-[200px]"
-    />
+    <div>
+      <div className="flex flex-wrap gap-1 mb-2 border-b pb-2">
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          className={`p-1 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
+        >
+          <FaBold />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          className={`p-1 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
+        >
+          <FaItalic />
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowUploader(true)}
+          className="p-1"
+        >
+          <FaImage />
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            const url = prompt("Введите URL", "http://");
+            if (url)
+              editor
+                .chain()
+                .focus()
+                .extendMarkRange("link")
+                .setLink({ href: url })
+                .run();
+          }}
+          className="p-1"
+        >
+          <FaLink />
+        </button>
+      </div>
+      <EditorContent
+        editor={editor}
+        className="border rounded p-2 min-h-[200px]"
+      />
+      {showUploader && (
+        <div className="mt-2">
+          <ImageUploader
+            onUploadComplete={(url) => {
+              insertImage(url as string);
+              setShowUploader(false);
+            }}
+          />
+        </div>
+      )}
+    </div>
   );
 }
