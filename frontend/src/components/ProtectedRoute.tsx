@@ -1,10 +1,11 @@
 "use client";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
+import jwtDecode from "jwt-decode";
+import { useAuth } from "../contexts/AuthContext";
 
-// Mock hook, replace with real auth hook
-function useUser() {
-  return { user: { id: 1 }, isLoading: false };
+interface DecodedJwt {
+  exp: number;
 }
 
 export default function ProtectedRoute({
@@ -12,18 +13,33 @@ export default function ProtectedRoute({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isLoading } = useUser();
+  const { user, accessToken, isLoading, refreshToken } = useAuth();
   const router = useRouter();
+  const path = usePathname() || "/";
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      router.push("/login");
+    async function check() {
+      if (!isLoading) {
+        if (accessToken) {
+          const { exp } = jwtDecode<DecodedJwt>(accessToken);
+          if (exp * 1000 < Date.now()) {
+            try {
+              await refreshToken();
+            } catch {
+              router.replace(`/login?next=${encodeURIComponent(path)}`);
+            }
+          }
+        }
+        if (!user) {
+          router.replace(`/login?next=${encodeURIComponent(path)}`);
+        }
+      }
     }
-  }, [user, isLoading, router]);
+    check();
+  }, [user, isLoading, accessToken, path, router, refreshToken]);
 
-  if (isLoading) {
+  if (isLoading || !user) {
     return <p>Загрузка...</p>;
   }
-
-  return user ? <>{children}</> : null;
+  return <>{children}</>;
 }
