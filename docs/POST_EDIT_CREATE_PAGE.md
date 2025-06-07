@@ -1,6 +1,7 @@
 # Документация страницы создания/редактирования постов
 
 ## Содержание
+
 1. [Общее описание](#общее-описание)
 2. [Структура страниц](#структура-страниц)
 3. [Формы и валидация](#формы-и-валидация)
@@ -80,25 +81,25 @@
     <h2>Основная информация</h2>
     {/* Поля для заголовка, описания, slug */}
   </section>
-  
+
   {/* Теги */}
   <section className="mb-8">
     <h2>Теги</h2>
     {/* Чекбоксы для выбора тегов */}
   </section>
-  
+
   {/* Настройки SEO */}
   <section className="mb-8">
     <h2>Настройки SEO</h2>
     {/* Поля для sitemap и SEO */}
   </section>
-  
+
   {/* Редактор контента */}
   <section className="mb-8">
     <h2>Основной контент поста</h2>
     <TiptapEditor />
   </section>
-  
+
   {/* Кнопки действий */}
   <div className="mt-8 flex justify-end space-x-4">
     {/* Кнопки сохранения/публикации */}
@@ -114,15 +115,15 @@
 
 ```typescript
 interface PostFormData {
-  title: string;           // Заголовок поста
-  slug?: string;           // URL-идентификатор (опционально, генерируется автоматически)
-  description: string;     // Краткое описание/аннотация
-  body: JSONContent;      // Содержимое в формате Tiptap JSON
-  is_published: boolean;   // Флаг публикации
-  sitemap_include: boolean;// Включение в sitemap
-  sitemap_priority: number;// Приоритет в sitemap (0.0-1.0)
+  title: string; // Заголовок поста
+  slug?: string; // URL-идентификатор (опционально, генерируется автоматически)
+  description: string; // Краткое описание/аннотация
+  body: JSONContent; // Содержимое в формате Tiptap JSON
+  is_published: boolean; // Флаг публикации
+  sitemap_include: boolean; // Включение в sitemap
+  sitemap_priority: number; // Приоритет в sitemap (0.0-1.0)
   sitemap_changefreq: string; // Частота изменений в sitemap
-  tags: number[];         // Массив ID выбранных тегов
+  tags: number[]; // Массив ID выбранных тегов
 }
 ```
 
@@ -150,10 +151,11 @@ const postSchema = z.object({
       MAX_DESCRIPTION_LENGTH,
       `Описание не должно превышать ${MAX_DESCRIPTION_LENGTH} символов`,
     ),
-  body: z.custom<JSONContent>().refine(
-    (val) => val !== undefined && val !== null, 
-    { message: "Body is required" }
-  ),
+  body: z
+    .custom<JSONContent>()
+    .refine((val) => val !== undefined && val !== null, {
+      message: "Body is required",
+    }),
   is_published: z.boolean(),
   sitemap_include: z.boolean(),
   sitemap_priority: z.number().min(0).max(1),
@@ -201,9 +203,9 @@ const title = watch("title");
 useEffect(() => {
   if (title) {
     const generatedSlug = slugify(title, {
-      lower: true,      // Преобразование в нижний регистр
-      strict: true,     // Строгое преобразование
-      locale: "ru",     // Локализация для корректной транслитерации
+      lower: true, // Преобразование в нижний регистр
+      strict: true, // Строгое преобразование
+      locale: "ru", // Локализация для корректной транслитерации
     });
     setValue("slug", generatedSlug);
   }
@@ -227,6 +229,7 @@ interface TiptapEditorProps {
 Основные возможности редактора:
 
 1. **Форматирование текста**:
+
    - Жирный, курсив, подчеркнутый, зачеркнутый текст
    - Заголовки (H1-H4)
    - Списки (маркированные и нумерованные)
@@ -234,6 +237,7 @@ interface TiptapEditorProps {
    - Выравнивание текста (по левому краю, по центру, по правому краю, по ширине)
 
 2. **Расширенные возможности**:
+
    - Вставка и редактирование изображений
    - Создание галерей из нескольких изображений
    - Вставка и форматирование таблиц
@@ -241,6 +245,7 @@ interface TiptapEditorProps {
    - Создание ссылок
 
 3. **Панель инструментов**:
+
 ```jsx
 <div className="flex flex-wrap gap-1 mb-2 border-b pb-2">
   {/* Блок форматирования текста */}
@@ -252,9 +257,9 @@ interface TiptapEditorProps {
   >
     <FaBold />
   </MenuButton>
-  
+
   {/* Другие кнопки форматирования... */}
-  
+
   {/* Блок вставки изображений/медиа */}
   <div className="border-l pl-2 ml-2">
     <MenuButton
@@ -273,7 +278,7 @@ interface TiptapEditorProps {
 
 ```typescript
 interface ImageUploaderProps {
-  label?: string;  // Текст метки
+  label?: string; // Текст метки
   multiple?: boolean; // Флаг множественной загрузки
   onUploadComplete: (url: string | string[]) => void; // Обработчик завершения загрузки
   cropMode?: "avatar" | "thumbnail" | "content"; // Режим обрезки
@@ -281,6 +286,7 @@ interface ImageUploaderProps {
 ```
 
 Функциональность компонента:
+
 1. Загрузка файлов через диалоговое окно
 2. Загрузка через drag-and-drop
 3. Предварительный просмотр изображений
@@ -302,10 +308,7 @@ interface ImageUploaderProps {
         checked={selectedTagIds.includes(tag.id)}
         onChange={() => handleTagChange(tag.id)}
       />
-      <label
-        htmlFor={`tag-${tag.id}`}
-        className="ml-2 text-sm text-gray-700"
-      >
+      <label htmlFor={`tag-${tag.id}`} className="ml-2 text-sm text-gray-700">
         {tag.name}
       </label>
     </div>
@@ -320,7 +323,7 @@ interface ImageUploaderProps {
 ```jsx
 <section className="mb-8 p-4 bg-gray-50 rounded-md">
   <h2 className="text-xl font-semibold mb-4">Настройки SEO и Sitemap</h2>
-  
+
   {/* Включение в sitemap */}
   <div className="mb-4">
     <input
@@ -335,14 +338,11 @@ interface ImageUploaderProps {
         }))
       }
     />
-    <label
-      htmlFor="sitemap_include"
-      className="ml-2 text-sm text-gray-700"
-    >
+    <label htmlFor="sitemap_include" className="ml-2 text-sm text-gray-700">
       Включить в Sitemap
     </label>
   </div>
-  
+
   {/* Приоритет в Sitemap */}
   <div className="mb-4">
     <label htmlFor="sitemap_priority" className="label-style">
@@ -355,7 +355,7 @@ interface ImageUploaderProps {
       max="1"
       name="sitemap_priority"
       id="sitemap_priority"
-      value={(post.sitemap_priority ?? 0.5)}
+      value={post.sitemap_priority ?? 0.5}
       onChange={(e) =>
         setPost((prev) => ({
           ...prev,
@@ -365,7 +365,7 @@ interface ImageUploaderProps {
       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
     />
   </div>
-  
+
   {/* Частота изменений */}
   <div>
     <label htmlFor="sitemap_changefreq" className="label-style">
@@ -374,7 +374,7 @@ interface ImageUploaderProps {
     <select
       name="sitemap_changefreq"
       id="sitemap_changefreq"
-      value={(post.sitemap_changefreq ?? "monthly")}
+      value={post.sitemap_changefreq ?? "monthly"}
       onChange={(e) =>
         setPost((prev) => ({
           ...prev,
@@ -410,22 +410,22 @@ fetchWithAuth = async (
   // Получаем текущие токены из localStorage
   let currentAccessToken = localStorage.getItem("accessToken");
   const currentRefreshToken = localStorage.getItem("refreshToken");
-  
+
   // Логика для проверки, обновления и использования токенов
   // ...
-  
+
   // Добавляем токен в заголовки
   const headers = new Headers(options.headers);
   if (currentAccessToken) {
     headers.set("Authorization", `Bearer ${currentAccessToken}`);
   }
-  
+
   // Выполняем запрос с токеном
   const response = await fetch(url, {
     ...options,
     headers,
   });
-  
+
   return response;
 };
 ```
@@ -502,6 +502,7 @@ try {
 При загрузке страницы создания поста выполняются следующие шаги:
 
 1. **Инициализация состояния**:
+
    ```typescript
    const initialPostState = {
      title: "",
@@ -517,6 +518,7 @@ try {
    ```
 
 2. **Загрузка списка тегов**:
+
    ```typescript
    useEffect(() => {
      const fetchTags = async () => {
@@ -528,7 +530,7 @@ try {
          setError("Не удалось загрузить теги");
        }
      };
-     
+
      fetchTags();
    }, []);
    ```
@@ -538,14 +540,16 @@ try {
 Процесс сохранения или публикации поста включает следующие шаги:
 
 1. **Сбор данных формы**:
+
    ```typescript
    const performSaveOrPublish = async (data: PostFormData) => {
      setIsLoadingPageContent(true);
      setError(null);
-     
+
      // Определяем, это публикация или черновик
-     const isPublishing = document.activeElement?.textContent?.includes("Опубликовать");
-     
+     const isPublishing =
+       document.activeElement?.textContent?.includes("Опубликовать");
+
      try {
        // Подготавливаем данные для отправки на сервер
        const postData = {
@@ -554,15 +558,15 @@ try {
          is_published: isPublishing,
          tags: selectedTagIds, // ID выбранных тегов
        };
-       
+
        // Отправка данных на сервер
        const response = await createPost(postData);
-       
+
        // Обработка успешного ответа
-       setSaveSuccessMessage(isPublishing 
-         ? "Пост успешно опубликован!" 
-         : "Черновик сохранен");
-         
+       setSaveSuccessMessage(
+         isPublishing ? "Пост успешно опубликован!" : "Черновик сохранен",
+       );
+
        // Редирект на страницу поста при публикации
        if (isPublishing) {
          setTimeout(() => {
@@ -582,7 +586,9 @@ try {
    После создания поста происходит ревалидация кеша для обновления данных на всех связанных страницах:
    ```typescript
    // Запрос на ревалидацию кеша Next.js
-   await fetch(`/api/revalidate?tag=posts&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`);
+   await fetch(
+     `/api/revalidate?tag=posts&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
+   );
    ```
 
 ## Процесс редактирования поста
@@ -595,27 +601,27 @@ try {
 useEffect(() => {
   const fetchPost = async () => {
     if (!params.slug) return;
-    
+
     setIsLoadingPageContent(true);
     setError(null);
-    
+
     try {
       // Запрос данных поста по slug
       const postData = await getPost(params.slug);
-      
+
       // Обновление состояния формы загруженными данными
       setPost(postData);
-      
+
       // Установка выбранных тегов
       if (postData.tags && Array.isArray(postData.tags)) {
         setSelectedTagIds(postData.tags.map((tag) => tag.id));
       }
-      
+
       // Установка содержимого редактора
       if (postData.body) {
         setEditorContent(postData.body);
       }
-      
+
       // Заполнение формы данными
       reset({
         title: postData.title || "",
@@ -635,7 +641,7 @@ useEffect(() => {
       setIsLoadingPageContent(false);
     }
   };
-  
+
   if (user) {
     fetchPost();
   }
@@ -650,7 +656,7 @@ useEffect(() => {
 const onSubmit: SubmitHandler<PostFormData> = async (data) => {
   setIsLoadingPageContent(true);
   setError(null);
-  
+
   try {
     // Подготовка данных для обновления
     const updateData = {
@@ -658,15 +664,17 @@ const onSubmit: SubmitHandler<PostFormData> = async (data) => {
       body: editorContent, // Содержимое из редактора Tiptap
       tags: selectedTagIds, // ID выбранных тегов
     };
-    
+
     // Отправка запроса на обновление
     await updatePost(params.slug, updateData);
-    
+
     // Успешное обновление
     setSaveSuccessMessage("Изменения сохранены");
-    
+
     // Ревалидация кеша
-    await fetch(`/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`);
+    await fetch(
+      `/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
+    );
   } catch (error) {
     console.error("Ошибка при обновлении поста:", error);
     setError(error.message || "Не удалось обновить пост");
@@ -684,11 +692,11 @@ const onSubmit: SubmitHandler<PostFormData> = async (data) => {
 
 ```typescript
 interface Tag {
-  id: number;        // Уникальный идентификатор тега
-  name: string;      // Название тега
-  slug: string;      // URL-идентификатор тега
+  id: number; // Уникальный идентификатор тега
+  name: string; // Название тега
+  slug: string; // URL-идентификатор тега
   description?: string; // Опциональное описание тега
-  post_count?: number;  // Количество связанных постов (для статистики)
+  post_count?: number; // Количество связанных постов (для статистики)
 }
 ```
 
@@ -702,11 +710,11 @@ const fetchAllTags = async () => {
   try {
     const url = buildApiUrl("/api/v1/tags/");
     const response = await fetchWithAuth(url);
-    
+
     if (!response.ok) {
       throw new Error("Ошибка при загрузке тегов");
     }
-    
+
     const tagsData = await response.json();
     setAllTags(tagsData);
   } catch (error) {
@@ -731,10 +739,7 @@ const fetchAllTags = async () => {
           checked={selectedTagIds.includes(tag.id)}
           onChange={() => handleTagChange(tag.id)}
         />
-        <label
-          htmlFor={`tag-${tag.id}`}
-          className="ml-2 text-sm text-gray-700"
-        >
+        <label htmlFor={`tag-${tag.id}`} className="ml-2 text-sm text-gray-700">
           {tag.name}
         </label>
       </div>
@@ -770,11 +775,11 @@ const handleTagChange = (tagId: number) => {
 
 ```typescript
 interface SEOSettings {
-  sitemap_include: boolean;     // Включать ли страницу в sitemap
-  sitemap_priority: number;     // Приоритет страницы (от 0.0 до 1.0)
-  sitemap_changefreq: string;   // Частота изменений (daily, weekly, monthly и т.д.)
-  meta_description?: string;    // Мета-описание для поисковых систем
-  meta_keywords?: string;       // Ключевые слова для мета-тегов
+  sitemap_include: boolean; // Включать ли страницу в sitemap
+  sitemap_priority: number; // Приоритет страницы (от 0.0 до 1.0)
+  sitemap_changefreq: string; // Частота изменений (daily, weekly, monthly и т.д.)
+  meta_description?: string; // Мета-описание для поисковых систем
+  meta_keywords?: string; // Ключевые слова для мета-тегов
 }
 ```
 
@@ -785,7 +790,7 @@ interface SEOSettings {
 ```jsx
 <section className="mb-8 p-4 bg-gray-50 rounded-md">
   <h2 className="text-xl font-semibold mb-4">Настройки SEO и Sitemap</h2>
-  
+
   {/* Включение в sitemap */}
   <div className="mb-4 flex items-center">
     <input
@@ -800,11 +805,9 @@ interface SEOSettings {
       }}
       className="mr-2"
     />
-    <label htmlFor="sitemap_include">
-      Включить страницу в sitemap
-    </label>
+    <label htmlFor="sitemap_include">Включить страницу в sitemap</label>
   </div>
-  
+
   {/* Приоритет в sitemap */}
   <div className="mb-4">
     <label htmlFor="sitemap_priority" className="label-style">
@@ -826,7 +829,7 @@ interface SEOSettings {
       className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
     />
   </div>
-  
+
   {/* Частота изменений */}
   <div>
     <label htmlFor="sitemap_changefreq" className="label-style">
@@ -862,12 +865,12 @@ interface SEOSettings {
 ```typescript
 // Запрос на ревалидацию кеша после создания поста
 await fetch(
-  `/api/revalidate?tag=posts&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`
+  `/api/revalidate?tag=posts&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
 );
 
 // Запрос на ревалидацию кеша после обновления конкретного поста
 await fetch(
-  `/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`
+  `/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
 );
 ```
 
@@ -878,10 +881,12 @@ await fetch(
 ### Оптимизация формы и UX
 
 1. **Предотвращение случайной потери данных**:
+
    - Использование состояния `isDirty` из React Hook Form для отслеживания изменений
    - Предупреждение пользователя при попытке закрыть страницу с несохраненными изменениями
 
 2. **Оптимизация работы с изображениями**:
+
    - Компрессия изображений перед загрузкой
    - Предварительный просмотр и обрезка изображений перед сохранением
    - Индикаторы прогресса загрузки
@@ -894,22 +899,23 @@ await fetch(
 ### Безопасность
 
 1. **Защита маршрутов**:
+
    ```jsx
    // Компонент защиты маршрутов администратора
    export default function ProtectedRoute({ children }) {
      const { user, isLoading } = useUser();
      const router = useRouter();
-     
+
      useEffect(() => {
        if (!isLoading && !user) {
          router.push("/login");
        }
      }, [user, isLoading, router]);
-     
+
      if (isLoading) {
        return <LoadingSpinner />;
      }
-     
+
      return user ? <>{children}</> : null;
    }
    ```
@@ -922,11 +928,13 @@ await fetch(
 ### Производительность и масштабируемость
 
 1. **Оптимизация редактора контента**:
+
    - Отложенная загрузка компонентов редактора
    - Разделение на подкомпоненты для уменьшения перерисовок
    - Оптимизация работы с большими объемами текста
 
 2. **Кеширование и ревалидация**:
+
    - Использование Next.js On-Demand Revalidation API
    - Точечная инвалидация кеша только для изменившихся страниц
    - Стратегия стейл-вайл-ревалидейт для быстрой загрузки страниц
