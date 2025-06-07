@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
+    "rest_framework_simplejwt",
     "blog",
 ]
 
@@ -122,6 +124,18 @@ STATIC_ROOT = os.environ.get("STATIC_ROOT", str(BASE_DIR / "static"))
 STATICFILES_DIRS = [BASE_DIR / "staticfiles"]
 
 MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ),
+}
 
 # Тип первичного ключа по умолчанию
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
