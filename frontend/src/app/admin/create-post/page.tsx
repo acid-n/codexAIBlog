@@ -1,23 +1,39 @@
 "use client";
+import { useEffect, useState } from "react";
 import PostForm, { PostFormData } from "../../../components/PostForm";
+import ProtectedRoute from "../../../components/ProtectedRoute";
+import { createPost, getAllTags } from "../../../lib/api";
+import { useRouter } from "next/navigation";
 
-const mockTags = [
-  { id: 1, name: "Tech" },
-  { id: 2, name: "Life" },
-  { id: 3, name: "Art" },
-];
+interface Tag {
+  id: number;
+  name: string;
+}
 
 export default function CreatePostPage() {
-  const handleSubmit = (data: PostFormData) => {
-    // В реальном приложении здесь будет вызов API
-    console.log("create", data);
-    alert("Черновик сохранен (mock)");
+  const [tags, setTags] = useState<Tag[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    getAllTags()
+      .then(setTags)
+      .catch(() => setTags([]));
+  }, []);
+
+  const handleSubmit = async (data: PostFormData) => {
+    await createPost(data);
+    await fetch(
+      `/api/revalidate?tag=posts&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
+    );
+    router.push("/admin/posts");
   };
 
   return (
-    <div>
-      <h1 className="mb-4 text-2xl font-bold">Создать пост</h1>
-      <PostForm allTags={mockTags} onSubmit={handleSubmit} />
-    </div>
+    <ProtectedRoute>
+      <div>
+        <h1 className="mb-4 text-2xl font-bold">Создать пост</h1>
+        <PostForm allTags={tags} onSubmit={handleSubmit} />
+      </div>
+    </ProtectedRoute>
   );
 }

@@ -1,44 +1,44 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import PostForm, { PostFormData } from "../../../../components/PostForm";
+import ProtectedRoute from "../../../../components/ProtectedRoute";
+import { getPost, updatePost, getAllTags } from "../../../../lib/api";
 
-const mockTags = [
-  { id: 1, name: "Tech" },
-  { id: 2, name: "Life" },
-  { id: 3, name: "Art" },
-];
-
-const mockPosts: PostFormData[] = [
-  {
-    title: "Hello",
-    slug: "hello",
-    description: "desc",
-    body: { type: "doc", content: [] },
-    is_published: false,
-    sitemap_include: true,
-    sitemap_priority: 0.5,
-    sitemap_changefreq: "monthly",
-    tags: [1],
-  },
-];
+interface Tag {
+  id: number;
+  name: string;
+}
 
 export default function EditPostPage() {
   const params = useParams<{ slug: string }>();
-  const post = mockPosts.find((p) => p.slug === params.slug);
+  const [post, setPost] = useState<PostFormData | null>(null);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const router = useRouter();
 
-  const handleSubmit = (data: PostFormData) => {
-    console.log("update", data);
-    alert("Изменения сохранены (mock)");
+  useEffect(() => {
+    getAllTags().then(setTags);
+    getPost(params.slug).then(setPost);
+  }, [params.slug]);
+
+  const handleSubmit = async (data: PostFormData) => {
+    await updatePost(params.slug, data);
+    await fetch(
+      `/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
+    );
+    router.push("/admin/posts");
   };
 
   if (!post) {
-    return <p>Пост не найден</p>;
+    return <p>Загрузка...</p>;
   }
 
   return (
-    <div>
-      <h1 className="mb-4 text-2xl font-bold">Редактировать пост</h1>
-      <PostForm initialData={post} allTags={mockTags} onSubmit={handleSubmit} />
-    </div>
+    <ProtectedRoute>
+      <div>
+        <h1 className="mb-4 text-2xl font-bold">Редактировать пост</h1>
+        <PostForm initialData={post} allTags={tags} onSubmit={handleSubmit} />
+      </div>
+    </ProtectedRoute>
   );
 }

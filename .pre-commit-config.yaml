@@ -27,6 +27,6 @@ repos:
     hooks:
       - id: run-tests
         name: Run backend and frontend tests
-        entry: bash -c 'pytest --cov=backend/blog && cd frontend && npm test -- --coverage'
+        entry: scripts/run-tests.sh
         language: system
         pass_filenames: false

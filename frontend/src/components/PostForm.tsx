@@ -1,11 +1,11 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
 import TiptapEditor from "./tiptap-editor";
-import TagSelector from "./TagSelector";
+import TagsInput from "./TagsInput";
 
 const schema = z.object({
   title: z.string().min(1, "Заголовок обязателен").max(80),
@@ -16,6 +16,8 @@ const schema = z.object({
   sitemap_include: z.boolean(),
   sitemap_priority: z.number().min(0).max(1),
   sitemap_changefreq: z.string(),
+  meta_description: z.string().optional(),
+  meta_keywords: z.string().optional(),
   tags: z.array(z.number()),
 });
 
@@ -50,9 +52,13 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       sitemap_include: true,
       sitemap_priority: 0.5,
       sitemap_changefreq: "monthly",
+      meta_description: "",
+      meta_keywords: "",
       tags: [],
     },
   });
+
+  const [publish, setPublish] = useState(false);
 
   const title = watch("title");
   const tags = watch("tags");
@@ -79,7 +85,12 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
   }, [isDirty]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      onSubmit={handleSubmit((data) =>
+        onSubmit({ ...data, is_published: publish }),
+      )}
+      className="space-y-6"
+    >
       <div>
         <label htmlFor="title" className="block mb-1">
           Заголовок
@@ -129,16 +140,13 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       </div>
       <div>
         <label className="block mb-1">Теги</label>
-        <TagSelector
-          tags={allTags}
-          selected={tags}
+        <TagsInput
+          available={allTags}
+          value={tags}
           onChange={(ids) => setValue("tags", ids)}
         />
       </div>
       <div className="flex items-center gap-4">
-        <label className="flex items-center gap-2">
-          <input type="checkbox" {...register("is_published")} /> Опубликовать
-        </label>
         <label className="flex items-center gap-2">
           <input type="checkbox" {...register("sitemap_include")} /> В Sitemap
         </label>
@@ -171,12 +179,38 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
           </select>
         </div>
       </div>
-      <button
-        type="submit"
-        className="rounded bg-blue-600 px-4 py-2 text-white"
-      >
-        Сохранить
-      </button>
+      <div>
+        <label className="block mb-1">Meta description</label>
+        <textarea
+          {...register("meta_description")}
+          className="w-full border rounded p-2"
+          rows={2}
+        />
+      </div>
+      <div>
+        <label className="block mb-1">Meta keywords</label>
+        <input
+          type="text"
+          {...register("meta_keywords")}
+          className="w-full border rounded p-2"
+        />
+      </div>
+      <div className="flex gap-4">
+        <button
+          type="submit"
+          onClick={() => setPublish(false)}
+          className="rounded bg-gray-600 px-4 py-2 text-white"
+        >
+          Сохранить черновик
+        </button>
+        <button
+          type="submit"
+          onClick={() => setPublish(true)}
+          className="rounded bg-blue-600 px-4 py-2 text-white"
+        >
+          Опубликовать
+        </button>
+      </div>
     </form>
   );
 }
