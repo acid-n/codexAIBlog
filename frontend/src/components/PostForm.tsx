@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
 import TiptapEditor from "./tiptap-editor";
 import TagsInput from "./TagsInput";
+import ImageUploader from "./image-uploader";
 
 const schema = z.object({
   title: z.string().min(1, "Заголовок обязателен").max(80),
@@ -18,6 +19,7 @@ const schema = z.object({
   sitemap_changefreq: z.string(),
   meta_description: z.string().min(1, "Meta description обязателен").max(160),
   meta_keywords: z.string().min(1, "Meta keywords обязательны").max(160),
+  image: z.any().optional(),
   tags: z.array(z.number()),
 });
 
@@ -54,6 +56,7 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       sitemap_changefreq: "monthly",
       meta_description: "",
       meta_keywords: "",
+      image: null,
       tags: [],
     },
   });
@@ -67,6 +70,7 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
   const metaKeywordsValue = watch("meta_keywords");
   const tags = watch("tags");
   const body = watch("body");
+  const image = watch("image");
 
   useEffect(() => {
     if (title && !dirtyFields.slug) {
@@ -140,6 +144,16 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
         {errors.description && (
           <p className="text-red-500 text-sm">{errors.description.message}</p>
         )}
+      </div>
+      <div>
+        <label className="block mb-1">Анонс-изображение</label>
+        <Controller
+          control={control}
+          name="image"
+          render={({ field }) => (
+            <ImageUploader onUploadComplete={(f) => field.onChange(f)} />
+          )}
+        />
       </div>
       <div>
         <label className="block mb-1">Контент</label>

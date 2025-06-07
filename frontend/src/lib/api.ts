@@ -12,19 +12,41 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
   return res.json();
 }
 
-export const createPost = (data: any) =>
-  fetchWithAuth(`${API_URL}/v1/posts/`, {
+export const createPost = (data: any) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === "image" && value instanceof Blob) {
+      formData.append("image", value, "image.webp");
+    } else {
+      formData.append(
+        key,
+        typeof value === "object" ? JSON.stringify(value) : String(value),
+      );
+    }
+  });
+  return fetchWithAuth(`${API_URL}/v1/posts/`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+    body: formData,
   });
+};
 
-export const updatePost = (slug: string, data: any) =>
-  fetchWithAuth(`${API_URL}/v1/posts/${slug}/`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
+export const updatePost = (slug: string, data: any) => {
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (key === "image" && value instanceof Blob) {
+      formData.append("image", value, "image.webp");
+    } else {
+      formData.append(
+        key,
+        typeof value === "object" ? JSON.stringify(value) : String(value),
+      );
+    }
   });
+  return fetchWithAuth(`${API_URL}/v1/posts/${slug}/`, {
+    method: "PATCH",
+    body: formData,
+  });
+};
 
 export const getPost = (slug: string) =>
   fetchWithAuth(`${API_URL}/v1/posts/${slug}/`);
