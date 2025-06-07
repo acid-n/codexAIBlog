@@ -4,11 +4,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-lora)", "Georgia", "serif"],
-        heading: ["var(--font-coustard)", "Georgia", "serif"],
+        sans: ["Georgia", "serif"],
+        decorative: ["var(--font-playfair)", "Georgia", "serif"],
+      },
+      colors: {
+        text: "#222",
       },
       maxWidth: {
-        content: "780px",
+        content: "800px",
       },
     },
   },
