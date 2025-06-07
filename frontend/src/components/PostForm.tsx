@@ -16,8 +16,8 @@ const schema = z.object({
   sitemap_include: z.boolean(),
   sitemap_priority: z.number().min(0).max(1),
   sitemap_changefreq: z.string(),
-  meta_description: z.string().optional(),
-  meta_keywords: z.string().optional(),
+  meta_description: z.string().min(1, "Meta description обязателен").max(160),
+  meta_keywords: z.string().min(1, "Meta keywords обязательны").max(160),
   tags: z.array(z.number()),
 });
 
@@ -40,7 +40,7 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
     handleSubmit,
     watch,
     setValue,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields, isSubmitting },
   } = useForm<PostFormData>({
     resolver: zodResolver(schema),
     defaultValues: initialData ?? {
@@ -61,17 +61,21 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
   const [publish, setPublish] = useState(false);
 
   const title = watch("title");
+  const slugValue = watch("slug");
+  const descriptionValue = watch("description");
+  const metaDescriptionValue = watch("meta_description");
+  const metaKeywordsValue = watch("meta_keywords");
   const tags = watch("tags");
   const body = watch("body");
 
   useEffect(() => {
-    if (title) {
+    if (title && !dirtyFields.slug) {
       setValue(
         "slug",
         slugify(title, { lower: true, strict: true, locale: "ru" }),
       );
     }
-  }, [title, setValue]);
+  }, [title, setValue, dirtyFields.slug]);
 
   useEffect(() => {
     const handler = (e: BeforeUnloadEvent) => {
@@ -94,6 +98,9 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       <div>
         <label htmlFor="title" className="block mb-1">
           Заголовок
+          <span className="ml-2 text-sm text-gray-500">
+            {title?.length || 0}/80
+          </span>
         </label>
         <input
           id="title"
@@ -107,6 +114,9 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       <div>
         <label htmlFor="slug" className="block mb-1">
           Slug
+          <span className="ml-2 text-sm text-gray-500">
+            {slugValue?.length || 0}
+          </span>
         </label>
         <input
           id="slug"
@@ -117,6 +127,9 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       <div>
         <label htmlFor="description" className="block mb-1">
           Описание
+          <span className="ml-2 text-sm text-gray-500">
+            {descriptionValue?.length || 0}/160
+          </span>
         </label>
         <textarea
           id="description"
@@ -180,7 +193,12 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
         </div>
       </div>
       <div>
-        <label className="block mb-1">Meta description</label>
+        <label className="block mb-1">
+          Meta description
+          <span className="ml-2 text-sm text-gray-500">
+            {metaDescriptionValue?.length || 0}/160
+          </span>
+        </label>
         <textarea
           {...register("meta_description")}
           className="w-full border rounded p-2"
@@ -188,7 +206,12 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
         />
       </div>
       <div>
-        <label className="block mb-1">Meta keywords</label>
+        <label className="block mb-1">
+          Meta keywords
+          <span className="ml-2 text-sm text-gray-500">
+            {metaKeywordsValue?.length || 0}/160
+          </span>
+        </label>
         <input
           type="text"
           {...register("meta_keywords")}
@@ -199,16 +222,18 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
         <button
           type="submit"
           onClick={() => setPublish(false)}
-          className="rounded bg-gray-600 px-4 py-2 text-white"
+          disabled={isSubmitting}
+          className="rounded bg-gray-600 px-4 py-2 text-white disabled:opacity-50"
         >
-          Сохранить черновик
+          {isSubmitting ? "Сохранение..." : "Сохранить черновик"}
         </button>
         <button
           type="submit"
           onClick={() => setPublish(true)}
-          className="rounded bg-blue-600 px-4 py-2 text-white"
+          disabled={isSubmitting}
+          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
         >
-          Опубликовать
+          {isSubmitting ? "Сохранение..." : "Опубликовать"}
         </button>
       </div>
     </form>
