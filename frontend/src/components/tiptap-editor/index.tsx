@@ -6,7 +6,17 @@ import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import { useEffect, useState } from "react";
-import { FaBold, FaItalic, FaImage, FaLink } from "react-icons/fa";
+import {
+  FaBold,
+  FaItalic,
+  FaImage,
+  FaLink,
+  FaHeading,
+  FaListUl,
+  FaListOl,
+  FaQuoteRight,
+  FaCode,
+} from "react-icons/fa";
 import ImageUploader from "../image-uploader";
 
 interface Props {
@@ -67,6 +77,51 @@ export default function TiptapEditor({
         </button>
         <button
           type="button"
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={`p-1 ${
+            editor.isActive("heading", { level: 2 }) ? "bg-gray-200" : ""
+          }`}
+        >
+          <FaHeading />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={`p-1 ${
+            editor.isActive("bulletList") ? "bg-gray-200" : ""
+          }`}
+        >
+          <FaListUl />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={`p-1 ${
+            editor.isActive("orderedList") ? "bg-gray-200" : ""
+          }`}
+        >
+          <FaListOl />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={`p-1 ${
+            editor.isActive("blockquote") ? "bg-gray-200" : ""
+          }`}
+        >
+          <FaQuoteRight />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={`p-1 ${editor.isActive("codeBlock") ? "bg-gray-200" : ""}`}
+        >
+          <FaCode />
+        </button>
+        <button
+          type="button"
           onClick={() => setShowUploader(true)}
           className="p-1"
         >
@@ -91,7 +146,7 @@ export default function TiptapEditor({
       </div>
       <EditorContent
         editor={editor}
-        className="border rounded p-2 min-h-[200px]"
+        className="border rounded p-2 min-h-[300px] resize-y"
       />
       {showUploader && (
         <div className="mt-2">
