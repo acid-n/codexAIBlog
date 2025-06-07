@@ -17,6 +17,7 @@ services:
     working_dir: /app
     volumes:
       - ../backend:/app
+      - static_data:/app/static
     env_file:
       - ../.env
     depends_on:
@@ -39,3 +40,4 @@ services:
       - "3000:3000"
 volumes:
   postgres_data:
+  static_data:
