@@ -15,7 +15,7 @@ export default function ProtectedRoute({
 }) {
   const { user, accessToken, isLoading, refreshToken } = useAuth();
   const router = useRouter();
-  const path = usePathname();
+  const path = usePathname() || "/";
 
   useEffect(() => {
     async function check() {

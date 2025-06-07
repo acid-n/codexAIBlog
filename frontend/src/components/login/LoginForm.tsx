@@ -1,18 +1,15 @@
 "use client";
 import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 
-export default function LoginForm() {
+export default function LoginForm({ nextPath = "/" }: { nextPath?: string }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const nextPath = searchParams.get("next") || "/";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

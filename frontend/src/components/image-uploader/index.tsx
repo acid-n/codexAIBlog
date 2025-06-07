@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import Image from "next/image";
 
 interface ImageInfo {
   originalUrl: string;
@@ -83,13 +84,25 @@ export default function ImageUploader({
           {previews.map((p, idx) => (
             <div key={idx} className="flex gap-4">
               <div className="text-center">
-                <img src={p.originalUrl} alt="orig" className="max-w-[150px]" />
+                <Image
+                  src={p.originalUrl}
+                  alt="orig"
+                  width={p.width}
+                  height={p.height}
+                  className="max-w-[150px] h-auto"
+                />
                 <p className="text-xs">
                   {(p.originalSize / 1024).toFixed(1)}kB
                 </p>
               </div>
               <div className="text-center">
-                <img src={p.webpUrl} alt="webp" className="max-w-[150px]" />
+                <Image
+                  src={p.webpUrl}
+                  alt="webp"
+                  width={p.width}
+                  height={p.height}
+                  className="max-w-[150px] h-auto"
+                />
                 <p className="text-xs">
                   {(p.webpSize / 1024).toFixed(1)}kB WEBP
                 </p>

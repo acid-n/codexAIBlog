@@ -11,7 +11,7 @@ interface Tag {
 }
 
 export default function EditPostPage() {
-  const params = useParams<{ slug: string }>();
+  const params = useParams<{ slug: string }>()!;
   const [post, setPost] = useState<PostFormData | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const router = useRouter();

@@ -1,6 +1,12 @@
 "use client";
 import jwtDecode from "jwt-decode";
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 
 interface DecodedJwt {
   user_id: number;
@@ -37,6 +43,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [refreshTokenState, setRefreshToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const handleRefresh = useCallback(
+    async (token?: string) => {
+      const refresh = token || refreshTokenState;
+      if (!refresh) return;
+      const res = await fetch("/api/token/refresh/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ refresh }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAuthState(data.access, refresh);
+      } else {
+        logout();
+        throw new Error("Failed to refresh token");
+      }
+    },
+    [refreshTokenState],
+  );
 
   useEffect(() => {
     const access = localStorage.getItem("accessToken");
@@ -50,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setAuthState(access, refresh);
     }
     setIsLoading(false);
-  }, []);
+  }, [handleRefresh]);
 
   function setAuthState(access: string, refresh: string) {
     localStorage.setItem("accessToken", access);
@@ -63,23 +88,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email: decoded.email,
       username: decoded.username,
     });
-  }
-
-  async function handleRefresh(token?: string) {
-    const refresh = token || refreshTokenState;
-    if (!refresh) return;
-    const res = await fetch("/api/token/refresh/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ refresh }),
-    });
-    if (res.ok) {
-      const data = await res.json();
-      setAuthState(data.access, refresh);
-    } else {
-      logout();
-      throw new Error("Failed to refresh token");
-    }
   }
 
   async function login(email: string, password: string) {

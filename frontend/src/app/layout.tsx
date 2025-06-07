@@ -17,16 +17,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body>
         <AuthProvider>
           <header className="mx-auto max-w-content py-8 text-text">
