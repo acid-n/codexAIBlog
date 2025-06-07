@@ -165,8 +165,10 @@ export default function TiptapEditor({
       {showUploader && (
         <div className="mt-2">
           <ImageUploader
-            onUploadComplete={(url) => {
-              insertImage(url as string);
+            onUploadComplete={(file) => {
+              const blob = Array.isArray(file) ? file[0] : file;
+              const url = URL.createObjectURL(blob);
+              insertImage(url);
               setShowUploader(false);
             }}
           />

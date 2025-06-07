@@ -13,6 +13,7 @@
 - В репозиторий добавлен `package-lock.json` для детерминированной установки.
 - В `devDependencies` фронтенда добавлены `typescript`, `@types/react`, `@types/node` и пакеты ESLint.
 - В workflow CI проверяются версии `tsc` и `eslint`.
+- Исправлена типизация в `TiptapEditor` для стабильной сборки.
 
 ## Тестирование
 
@@ -21,6 +22,7 @@
 - Сборка стека через `docker compose -f infra/docker-compose.yml up --build`.
 - Сборка фронтенда командой `npm run build`.
 - Проверены версии `tsc` и `eslint` после установки зависимостей.
+- Запущены unit-тесты фронтенда `npm test`.
 
 Контейнер бэкенда стартовал успешно, `collectstatic` отработал, приложение доступно на `http://localhost:8000`, фронтенд — на `http://localhost:3000`. Статика отдаётся из `/static/`.
 
