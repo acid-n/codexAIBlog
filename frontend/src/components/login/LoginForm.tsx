@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "../../contexts/AuthContext";
 
 export default function LoginForm({ nextPath = "/" }: { nextPath?: string }) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -13,13 +13,13 @@ export default function LoginForm({ nextPath = "/" }: { nextPath?: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!email || !password) {
-      setError("Введите email и пароль");
+    if (!username || !password) {
+      setError("Введите имя пользователя и пароль");
       return;
     }
     setLoading(true);
     try {
-      await login(email, password);
+      await login(username, password);
       router.push(nextPath);
     } catch (e: any) {
       setError(e.message);
@@ -31,12 +31,12 @@ export default function LoginForm({ nextPath = "/" }: { nextPath?: string }) {
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
       <input
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         required
         className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-base"
-        placeholder="Email"
+        placeholder="Имя пользователя"
       />
       <input
         type="password"
