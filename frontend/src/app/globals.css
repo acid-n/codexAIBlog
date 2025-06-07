@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --font-lora: "Lora", Georgia, serif;
-  --font-coustard: "Coustard", "Inter", sans-serif;
+  --font-playfair: "Playfair Display", Georgia, serif;
+}
+
+body {
+  @apply font-sans text-text bg-white leading-relaxed;
 }

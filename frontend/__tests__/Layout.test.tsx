@@ -1,7 +1,9 @@
 import { render, screen } from "@testing-library/react";
 jest.mock("next/font/google", () => ({
-  Lora: () => ({ className: "lora", variable: "--font-lora" }),
-  Coustard: () => ({ className: "coustard", variable: "--font-coustard" }),
+  Playfair_Display: () => ({
+    className: "playfair",
+    variable: "--font-playfair",
+  }),
 }));
 
 import RootLayout from "../src/app/layout";
@@ -9,8 +11,8 @@ import RootLayout from "../src/app/layout";
 test("renders navigation and footer", () => {
   const { container } = render(<RootLayout>child</RootLayout>);
   expect(container.querySelector("html")).not.toBeNull();
-  expect(screen.getByRole("link", { name: /musson/i })).toBeInTheDocument();
-  expect(screen.getByRole("searchbox")).toBeInTheDocument();
+  expect(screen.getByRole("heading", { name: /musson/i })).toBeInTheDocument();
+  expect(screen.getByText(/search/i)).toBeInTheDocument();
   expect(container.querySelector("footer")?.textContent).toMatch(
     /musson blog/i,
   );

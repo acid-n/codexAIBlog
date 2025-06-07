@@ -31,16 +31,18 @@ const posts: Post[] = [
 export default function Home() {
   return (
     <section>
-      <h1 className="mb-8 font-heading text-3xl">Последние статьи</h1>
-      <div className="space-y-6">
+      <h1 className="mb-8 text-center text-4xl font-bold">Последние статьи</h1>
+      <div className="space-y-10">
         {posts.map((post) => (
-          <article
-            key={post.id}
-            className="rounded border border-gray-200 p-6 transition-shadow hover:shadow-lg"
-          >
-            <h2 className="mb-2 text-xl font-heading transition-colors hover:text-blue-600">
-              <Link href={`/posts/${post.slug}`}>{post.title}</Link>
+          <article key={post.id} className="mx-auto max-w-prose text-center">
+            <h2 className="mb-1 text-[28px] font-bold leading-snug">
+              <Link href={`/posts/${post.slug}`} className="hover:underline">
+                {post.title}
+              </Link>
             </h2>
+            <p className="mb-2 text-sm text-gray-500">
+              20 августа 2024 · Автор · Категория
+            </p>
             <p className="text-gray-700">{post.description}</p>
           </article>
         ))}
