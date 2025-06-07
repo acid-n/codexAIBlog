@@ -10,3 +10,10 @@
 body {
   @apply font-sans text-text bg-white leading-relaxed;
 }
+
+.image-slider {
+  @apply flex overflow-x-auto gap-2 snap-x snap-mandatory;
+}
+.image-slider img {
+  @apply flex-shrink-0 w-full snap-center;
+}

@@ -1,21 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Lora } from "next/font/google";
 import "./globals.css";
 import SearchBar from "../components/SearchBar";
-
-const decorative = Cormorant_Garamond({
-  weight: ["400", "700"],
-  subsets: ["latin"],
-  variable: "--font-decorative",
-});
-
-const bodyFont = Lora({
-  weight: ["400", "700"],
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-body",
-});
 
 export const metadata: Metadata = {
   title: "Musson Blog",
@@ -28,7 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={`${decorative.variable} ${bodyFont.variable}`}>
+    <html lang="ru">
+      <head>
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body>
         <header className="mx-auto max-w-content py-8 text-text">
           <h1 className="font-decorative text-center text-5xl font-bold">

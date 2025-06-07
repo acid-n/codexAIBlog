@@ -5,6 +5,7 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
+import Slider from "./slider";
 import { useEffect, useState } from "react";
 import {
   FaBold,
@@ -31,6 +32,7 @@ export default function TiptapEditor({
   editable = true,
 }: Props) {
   const [showUploader, setShowUploader] = useState(false);
+  const [showSliderUploader, setShowSliderUploader] = useState(false);
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -38,6 +40,7 @@ export default function TiptapEditor({
       Image,
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Slider,
     ],
     content,
     editable,
@@ -56,6 +59,10 @@ export default function TiptapEditor({
 
   const insertImage = (url: string) => {
     editor.chain().focus().setImage({ src: url }).run();
+  };
+
+  const insertSlider = (urls: string[]) => {
+    editor.commands.setSlider(urls);
   };
 
   return (
@@ -129,6 +136,13 @@ export default function TiptapEditor({
         </button>
         <button
           type="button"
+          onClick={() => setShowSliderUploader(true)}
+          className="p-1"
+        >
+          Слайдер
+        </button>
+        <button
+          type="button"
           onClick={() => {
             const url = prompt("Введите URL", "http://");
             if (url)
@@ -151,9 +165,25 @@ export default function TiptapEditor({
       {showUploader && (
         <div className="mt-2">
           <ImageUploader
-            onUploadComplete={(url) => {
-              insertImage(url as string);
+            onUploadComplete={(file) => {
+              const blob = Array.isArray(file) ? file[0] : file;
+              const url = URL.createObjectURL(blob);
+              insertImage(url);
               setShowUploader(false);
+            }}
+          />
+        </div>
+      )}
+      {showSliderUploader && (
+        <div className="mt-2">
+          <ImageUploader
+            multiple
+            onUploadComplete={(files) => {
+              const urls = (Array.isArray(files) ? files : [files]).map((f) =>
+                URL.createObjectURL(f),
+              );
+              insertSlider(urls);
+              setShowSliderUploader(false);
             }}
           />
         </div>
