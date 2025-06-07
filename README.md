@@ -95,6 +95,12 @@ curl http://localhost:8000/api/v1/posts/
 curl -X POST http://localhost:8000/api/v1/ratings/ \
   -H 'Content-Type: application/json' \
   -d '{"post": 1, "score": 5, "user_hash": "123"}'
+
+# Создать пост
+curl -X POST http://localhost:8000/api/posts/ \
+  -H 'Authorization: Bearer <token>' \
+  -F title='Demo' \
+  -F body='{}'
 ```
 
 ## Статические файлы / collectstatic
