@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 :root {
-  --font-playfair: "Playfair Display", Georgia, serif;
+  --font-decorative: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Lora", Georgia, serif;
 }
 
 body {

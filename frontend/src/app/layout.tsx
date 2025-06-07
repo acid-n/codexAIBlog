@@ -1,13 +1,20 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Playfair_Display } from "next/font/google";
+import { Cormorant_Garamond, Lora } from "next/font/google";
 import "./globals.css";
+import SearchBar from "../components/SearchBar";
 
-const playfair = Playfair_Display({
+const decorative = Cormorant_Garamond({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-decorative",
+});
+
+const bodyFont = Lora({
   weight: ["400", "700"],
   subsets: ["latin", "cyrillic"],
-  variable: "--font-playfair",
+  variable: "--font-body",
 });
 
 export const metadata: Metadata = {
@@ -21,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" className={playfair.variable}>
+    <html lang="ru" className={`${decorative.variable} ${bodyFont.variable}`}>
       <body>
         <header className="mx-auto max-w-content py-8 text-text">
           <h1 className="font-decorative text-center text-5xl font-bold">
@@ -31,7 +38,7 @@ export default function RootLayout({
           <p className="text-center text-xs uppercase tracking-widest">
             Блог о технологиях и жизни
           </p>
-          <nav className="mt-6">
+          <nav className="mt-6 border-b border-gray-200 pb-3">
             <ul className="flex justify-center gap-6 text-[14px] uppercase">
               <li>
                 <Link href="/" className="hover:underline">
@@ -59,9 +66,7 @@ export default function RootLayout({
                 </Link>
               </li>
               <li>
-                <Link href="/search" className="hover:underline">
-                  Search →
-                </Link>
+                <SearchBar />
               </li>
             </ul>
           </nav>

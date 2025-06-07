@@ -10,20 +10,20 @@ interface Post {
 const posts: Post[] = [
   {
     id: 1,
-    title: "Mock Post 1",
-    slug: "mock-post-1",
+    title: "Как жить без нейросетей",
+    slug: "kak-zhit-bez-neyrosetey",
     description: "Краткое описание поста 1",
   },
   {
     id: 2,
-    title: "Mock Post 2",
-    slug: "mock-post-2",
+    title: "Оптимизация фронтенда в 2024",
+    slug: "optimizaciya-frontenda",
     description: "Краткое описание поста 2",
   },
   {
     id: 3,
-    title: "Mock Post 3",
-    slug: "mock-post-3",
+    title: "Стоит ли писать на Go?",
+    slug: "stoit-li-pisat-na-go",
     description: "Краткое описание поста 3",
   },
 ];
