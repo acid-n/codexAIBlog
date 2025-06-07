@@ -8,11 +8,14 @@ venv/
 .mypy_cache/
 *.sqlite3
 .coverage
+.coverage.*
+coverage.xml
+coverage/
+**/lcov.info
+**/coverage-final.json
 # Coverage artifacts
-# htmlcov/ directory is kept under version control
-# frontend/coverage/ directory is also stored
-htmlcov/*.png
-frontend/coverage/lcov-report/*.png
+htmlcov/
+frontend/coverage/
 build/
 dist/
 
