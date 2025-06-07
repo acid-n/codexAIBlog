@@ -1,4 +1,9 @@
 import { render, screen } from "@testing-library/react";
+jest.mock("next/font/google", () => ({
+  Lora: () => ({ className: "lora", variable: "--font-lora" }),
+  Coustard: () => ({ className: "coustard", variable: "--font-coustard" }),
+}));
+
 import RootLayout from "../src/app/layout";
 
 test("renders navigation and footer", () => {
