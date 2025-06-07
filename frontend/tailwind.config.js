@@ -4,8 +4,8 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Georgia", "serif"],
-        decorative: ["var(--font-playfair)", "Georgia", "serif"],
+        sans: ["var(--font-body)", "serif"],
+        decorative: ["var(--font-decorative)", "serif"],
       },
       colors: {
         text: "#222",

@@ -1,9 +1,17 @@
 import { render, screen } from "@testing-library/react";
 jest.mock("next/font/google", () => ({
-  Playfair_Display: () => ({
-    className: "playfair",
-    variable: "--font-playfair",
+  Cormorant_Garamond: () => ({
+    className: "decorative",
+    variable: "--font-decorative",
   }),
+  Lora: () => ({
+    className: "lora",
+    variable: "--font-body",
+  }),
+}));
+
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({ push: jest.fn() }),
 }));
 
 import RootLayout from "../src/app/layout";
