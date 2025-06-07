@@ -6,7 +6,7 @@ import "./globals.css";
 
 const lora = Lora({ subsets: ["latin", "cyrillic"], variable: "--font-lora" });
 const coustard = Coustard({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   variable: "--font-coustard",
 });
 

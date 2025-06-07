@@ -4,5 +4,5 @@
 
 :root {
   --font-lora: "Lora", Georgia, serif;
-  --font-coustard: "Coustard", Georgia, serif;
+  --font-coustard: "Coustard", "Inter", sans-serif;
 }
