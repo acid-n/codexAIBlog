@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { PlusCircle, LogOut, User } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
-import { LuPlusCircle } from "react-icons/lu";
+import Tooltip from "./Tooltip";
 
 export default function AdminNav() {
   const { user, logout } = useAuth();
@@ -13,20 +14,28 @@ export default function AdminNav() {
     router.push("/");
   };
   return (
-    <nav className="bg-gray-100 text-sm py-1 px-4 flex items-center gap-3">
-      <span className="font-medium">👤 {user.username}</span>
-      <Link
-        href="/posts/create/"
-        className="text-blue-600 flex items-center gap-1 hover:underline"
-      >
-        <LuPlusCircle className="w-4 h-4" /> Создать пост
-      </Link>
-      <button
-        onClick={handleLogout}
-        className="text-gray-500 hover:text-red-600"
-      >
-        🚪 Выйти
-      </button>
+    <nav className="bg-gray-50 border-b py-1">
+      <ul className="flex justify-center gap-4 text-gray-600 text-sm">
+        <li>
+          <Tooltip content={user.username}>
+            <User aria-label="Профиль" className="w-5 h-5" />
+          </Tooltip>
+        </li>
+        <li>
+          <Tooltip content="Создать пост">
+            <Link href="/admin/create-post" aria-label="Создать пост">
+              <PlusCircle className="w-5 h-5" />
+            </Link>
+          </Tooltip>
+        </li>
+        <li>
+          <Tooltip content="Выход">
+            <button onClick={handleLogout} aria-label="Выход">
+              <LogOut className="w-5 h-5" />
+            </button>
+          </Tooltip>
+        </li>
+      </ul>
     </nav>
   );
 }

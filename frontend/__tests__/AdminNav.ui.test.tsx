@@ -19,17 +19,17 @@ describe("AdminNav", () => {
     expect(container.firstChild).toBeNull();
   });
 
-  test("shows username and links", () => {
+  test("renders panel with icons", () => {
     useAuth.mockReturnValue({
       user: { id: 1, username: "admin", email: "a@a", isStaff: false },
       logout: jest.fn(),
     });
-    render(<AdminNav />);
-    expect(screen.getByText(/admin/)).toBeInTheDocument();
+    const { container } = render(<AdminNav />);
     expect(screen.getByRole("link", { name: /создать пост/i })).toHaveAttribute(
       "href",
-      "/posts/create",
+      "/admin/create-post",
     );
+    expect(container).toMatchSnapshot();
   });
 
   test("logout called", async () => {
@@ -40,7 +40,7 @@ describe("AdminNav", () => {
     });
     const user = userEvent.setup();
     render(<AdminNav />);
-    await user.click(screen.getByRole("button", { name: /выйти/i }));
+    await user.click(screen.getByRole("button", { name: /выход/i }));
     expect(logout).toHaveBeenCalled();
   });
 });

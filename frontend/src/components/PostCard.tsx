@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useAuth } from "../contexts/AuthContext";
-import { LuPencil } from "react-icons/lu";
+import { Pencil } from "lucide-react";
+import Tooltip from "./Tooltip";
 
 export interface PostCardData {
   id: number;
@@ -21,9 +22,11 @@ export default function PostCard({ post }: { post: PostCardData }) {
           {post.title}
         </Link>
         {canEdit && (
-          <Link href={`/posts/${post.slug}/edit`} aria-label="Редактировать">
-            <LuPencil className="inline-block w-4 h-4 ml-1 text-gray-500 hover:text-blue-600" />
-          </Link>
+          <Tooltip content="Редактировать">
+            <Link href={`/posts/${post.slug}/edit`} aria-label="Редактировать">
+              <Pencil className="inline-block w-4 h-4 ml-1 text-gray-500 hover:text-blue-600" />
+            </Link>
+          </Tooltip>
         )}
       </h2>
       <p className="mb-2 text-sm text-gray-500">
