@@ -1,5 +1,6 @@
 "use client";
 import jwtDecode from "jwt-decode";
+import { API_URL } from "../lib/api";
 import {
   createContext,
   useContext,
@@ -47,7 +48,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (token?: string) => {
       const refresh = token || refreshTokenState;
       if (!refresh) return;
-      const res = await fetch("/api/token/refresh/", {
+      const res = await fetch(`${API_URL}/token/refresh/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh }),
@@ -91,16 +92,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function login(username: string, password: string) {
-    const res = await fetch("/api/token/", {
+    const res = await fetch(`${API_URL}/token/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
     });
+    const contentType = res.headers.get("content-type") || "";
+    let data: any = null;
+    if (contentType.includes("application/json")) {
+      data = await res.json();
+    } else {
+      const text = await res.text();
+      data = { detail: text };
+    }
     if (!res.ok) {
-      const data = await res.json();
       throw new Error(data.detail || "Login error");
     }
-    const data = await res.json();
+    if (!contentType.includes("application/json")) {
+      throw new Error("Invalid server response");
+    }
     setAuthState(data.access, data.refresh);
   }
 

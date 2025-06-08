@@ -29,7 +29,11 @@ export default function LoginForm({ nextPath = "/" }: { nextPath?: string }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto space-y-4">
+    <form
+      onSubmit={handleSubmit}
+      className="max-w-md mx-auto space-y-4"
+      data-testid="login-form"
+    >
       <input
         type="text"
         value={username}
