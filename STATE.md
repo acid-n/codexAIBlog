@@ -12,3 +12,4 @@
 | TASK-059-admin-nav        | done   |
 | TASK-005                  | done   |
 | TASK-006                  | done   |
+| TASK-060-tiptap-ssr       | done   |
