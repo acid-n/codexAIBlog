@@ -89,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function setAuthState(access: string, refresh: string) {
     localStorage.setItem("accessToken", access);
     localStorage.setItem("refreshToken", refresh);
+    document.cookie = `access_token=${access}; path=/`;
     setAccessToken(access);
     setRefreshToken(refresh);
     const decoded = jwtDecode<DecodedJwt>(access);
@@ -131,6 +132,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function logout() {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
+    document.cookie = "access_token=; Max-Age=0; path=/";
     setUser(null);
     setAccessToken(null);
     setRefreshToken(null);

@@ -10,3 +10,5 @@
 | TASK-057-auth-bugfix      | done   |
 | TASK-058-cors-fix         | done   |
 | TASK-059-admin-nav        | done   |
+| TASK-005                  | done   |
+| TASK-006                  | done   |

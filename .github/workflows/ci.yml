@@ -41,14 +41,14 @@ jobs:
         run: |
           pip install pytest pytest-django pytest-cov
 
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+
       - name: Install frontend dependencies
-        run: |
-          cd frontend
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+        run: npm ci --prefix frontend
 
       - name: Verify TypeScript packages
         run: |
@@ -57,18 +57,14 @@ jobs:
           npx eslint --version
 
       - name: Build frontend
-        run: |
-          cd frontend
-          npm run build
+        run: npm run build --prefix frontend
 
       - name: Run backend tests
         run: |
           pytest --cov=backend/blog -q
 
       - name: Run frontend tests
-        run: |
-          cd frontend
-          npm test -- --coverage
+        run: npm run test:ci --prefix frontend
 
       - name: Build Docker images
         run: |
