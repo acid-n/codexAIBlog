@@ -1,6 +1,7 @@
 # Документация страницы авторизации
 
 ## Содержание
+
 1. [Общее описание](#общее-описание)
 2. [Структура страниц](#структура-страниц)
 3. [Формы и валидация](#формы-и-валидация)
@@ -42,11 +43,13 @@
 Система авторизации построена на следующих принципах:
 
 1. **Контекст авторизации** - центральный компонент `AuthContext`, который:
+
    - Хранит состояние аутентификации (пользователь, токены, состояние загрузки)
    - Управляет JWT токенами (сохранение, обновление, удаление)
    - Предоставляет API для входа, выхода и обновления токенов
 
 2. **Страница авторизации** - клиентский компонент, который:
+
    - Обрабатывает логику перенаправления для уже авторизованных пользователей
    - Показывает форму входа для неавторизованных пользователей
    - Поддерживает параметр `next` для возврата на запрошенную страницу после успешного входа
@@ -61,9 +64,9 @@
 
 ### Структура формы авторизации
 
-Форма авторизации реализована в компоненте `LoginForm.tsx` и содержит следующие элементы:
+-Форма авторизации реализована в компоненте `LoginForm.tsx` и содержит следующие элементы:
 
-- **Поле email** (формат email, обязательное)
+- **Поле логина** (`username`, обязательное)
 - **Поле пароля** (обязательное)
 - **Кнопка входа** с обработкой состояния загрузки (loading)
 - **Блок отображения ошибок**
@@ -73,13 +76,13 @@
 Форма использует следующие React-хуки для управления состоянием:
 
 ```jsx
-const [email, setEmail] = useState("");
+const [username, setUsername] = useState("");
 const [password, setPassword] = useState("");
 const [isLoading, setIsLoading] = useState(false);
-const [error, setError] = useState<string | null>(null);
+const [error, setError] = (useState < string) | (null > null);
 ```
 
-- `email` и `password` - состояния для хранения значений полей формы
+- `username` и `password` - состояния для хранения значений полей формы
 - `isLoading` - флаг, указывающий на процесс отправки запроса
 - `error` - хранение сообщения об ошибке (если таковая есть)
 
@@ -94,14 +97,14 @@ const router = useRouter();
 
 Валидация формы осуществляется на стороне клиента и включает простые проверки:
 
-- Проверка на пустоту полей email и пароля
+- Проверка на пустоту полей логина и пароля
 - Обработка ошибок сервера и отображение соответствующих сообщений
 
 Пример проверки перед отправкой формы:
 
 ```jsx
-if (!email || !password) {
-  setError("Введите email и пароль");
+if (!username || !password) {
+  setError("Введите имя пользователя и пароль");
   return;
 }
 ```
@@ -119,7 +122,7 @@ const response = await fetch("/api/token/", {
     "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    email,
+    username,
     password,
   }),
 });
@@ -139,6 +142,7 @@ const data = await response.json();
 ```
 
 Где:
+
 - `access` - краткосрочный токен доступа (обычно действует 15-60 минут)
 - `refresh` - долгосрочный токен обновления (обычно действует до 14 дней)
 
@@ -174,7 +178,7 @@ localStorage.setItem("refreshToken", refresh);
 2. Декодирование токена для получения данных пользователя:
 
 ```jsx
-const decodedToken = jwtDecode<DecodedJwt>(access);
+const decodedToken = jwtDecode < DecodedJwt > access;
 setUser({
   id: decodedToken.user_id,
   email: decodedToken.email,
@@ -202,10 +206,11 @@ setAccessToken(access);
 
 ```jsx
 const currentTime = Math.floor(Date.now() / 1000);
-const decodedToken = jwtDecode<DecodedJwt>(storedAccessToken);
+const decodedToken = jwtDecode < DecodedJwt > storedAccessToken;
 
 // Если токен истек или скоро истечет
-if (decodedToken.exp && decodedToken.exp < currentTime + 300) { // 5 минут запаса
+if (decodedToken.exp && decodedToken.exp < currentTime + 300) {
+  // 5 минут запаса
   // Выполняем обновление токена
   await refreshToken();
 }
@@ -215,8 +220,8 @@ if (decodedToken.exp && decodedToken.exp < currentTime + 300) { // 5 минут 
 
 ```jsx
 // Предотвращение циклических редиректов
-if (nextPath.includes('/admin/login')) {
-  nextPath = '/admin';
+if (nextPath.includes("/admin/login")) {
+  nextPath = "/admin";
 }
 ```
 
@@ -236,14 +241,14 @@ if (nextPath.includes('/admin/login')) {
 
 ```jsx
 <input
-  type="email"
-  name="email"
-  id="email"
-  value={email}
-  onChange={(e) => setEmail(e.target.value)}
+  type="text"
+  name="username"
+  id="username"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
   required
   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 text-base"
-  placeholder="Email"
+  placeholder="Имя пользователя"
 />
 ```
 
@@ -288,30 +293,32 @@ if (nextPath.includes('/admin/login')) {
 3. **Блок ошибок** с выделением красным цветом:
 
 ```jsx
-{error && (
-  <div className="mt-4 bg-red-50 border-l-4 border-red-400 p-4">
-    <div className="flex">
-      <div className="flex-shrink-0">
-        <svg
-          className="h-5 w-5 text-red-400"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fillRule="evenodd"
-            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-            clipRule="evenodd"
-          />
-        </svg>
-      </div>
-      <div className="ml-3">
-        <p className="text-sm text-red-700">{error}</p>
+{
+  error && (
+    <div className="mt-4 bg-red-50 border-l-4 border-red-400 p-4">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <svg
+            className="h-5 w-5 text-red-400"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <div className="ml-3">
+          <p className="text-sm text-red-700">{error}</p>
+        </div>
       </div>
     </div>
-  </div>
-)}
+  );
+}
 ```
 
 ### Адаптивность
@@ -329,6 +336,7 @@ if (nextPath.includes('/admin/login')) {
 Для улучшения пользовательского опыта в странице авторизации реализованы следующие элементы:
 
 1. **Индикаторы загрузки**:
+
    - Анимированный спиннер во время процесса входа
    - Замена текста кнопки на "Вход..." при отправке запроса
    - Отдельный индикатор загрузки на странице при проверке авторизации
@@ -343,6 +351,7 @@ if (nextPath.includes('/admin/login')) {
 В реализации страницы авторизации предусмотрены следующие механизмы переходов:
 
 1. **Запоминание пути доступа**:
+
    - Сохранение запрошенной страницы через параметр `next`
    - Автоматическое перенаправление после успешного входа
 

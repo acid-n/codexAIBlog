@@ -25,7 +25,7 @@ interface AuthContextValue {
   user: User | null;
   accessToken: string | null;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
 }
@@ -90,11 +90,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }
 
-  async function login(email: string, password: string) {
+  async function login(username: string, password: string) {
     const res = await fetch("/api/token/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ username, password }),
     });
     if (!res.ok) {
       const data = await res.json();
