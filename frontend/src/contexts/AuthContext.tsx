@@ -13,6 +13,7 @@ interface DecodedJwt {
   user_id: number;
   email: string;
   username: string;
+  is_staff?: boolean;
   exp: number;
 }
 
@@ -20,12 +21,14 @@ interface User {
   id: number;
   email: string;
   username: string;
+  isStaff: boolean;
 }
 
 interface AuthContextValue {
   user: User | null;
   accessToken: string | null;
   isLoading: boolean;
+  isStaff: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
   refreshToken: () => Promise<void>;
@@ -93,6 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       id: decoded.user_id,
       email: decoded.email,
       username: decoded.username,
+      isStaff: !!decoded.is_staff,
     });
   }
 
@@ -138,6 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         user,
         accessToken,
         isLoading,
+        isStaff: user?.isStaff || false,
         login,
         logout,
         refreshToken: handleRefresh,

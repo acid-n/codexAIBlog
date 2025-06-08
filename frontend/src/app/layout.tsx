@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import SearchBar from "../components/SearchBar";
 import { AuthProvider } from "../contexts/AuthContext";
+import AdminNav from "../components/AdminNav";
 
 export const metadata: Metadata = {
   title: "Musson Blog",
@@ -60,6 +61,7 @@ export default function RootLayout({
               </ul>
             </nav>
           </header>
+          <AdminNav />
           <main className="mx-auto max-w-content px-4 py-8">{children}</main>
           <footer className="mx-auto max-w-content px-4 py-8 text-center text-sm text-gray-500">
             <p>© Musson Blog</p>
