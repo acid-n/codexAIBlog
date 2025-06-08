@@ -5,6 +5,12 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
+import Strike from "@tiptap/extension-strike";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import Placeholder from "@tiptap/extension-placeholder";
+import Color from "@tiptap/extension-color";
+import TextStyle from "@tiptap/extension-text-style";
+import Highlight from "@tiptap/extension-highlight";
 import Slider from "./slider";
 import { useEffect, useState } from "react";
 import {
@@ -17,6 +23,12 @@ import {
   FaListOl,
   FaQuoteRight,
   FaCode,
+  FaStrikethrough,
+  FaUnderline,
+  FaUndo,
+  FaRedo,
+  FaPalette,
+  FaHighlighter,
 } from "react-icons/fa";
 import ImageUploader from "../image-uploader";
 
@@ -39,9 +51,17 @@ export default function TiptapEditor({
     extensions: [
       StarterKit,
       Underline,
+      Strike,
+      Color,
+      TextStyle,
+      Highlight,
       Image,
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
+      HorizontalRule,
+      Placeholder.configure({
+        placeholder: "Начните писать ваш пост...",
+      }),
       Slider,
     ],
     content,
@@ -60,7 +80,8 @@ export default function TiptapEditor({
   if (!editor) return null;
 
   const insertImage = (url: string) => {
-    editor.chain().focus().setImage({ src: url }).run();
+    const alt = prompt("Alt text") || "";
+    editor.chain().focus().setImage({ src: url, alt }).run();
   };
 
   const insertSlider = (urls: string[]) => {
@@ -76,6 +97,20 @@ export default function TiptapEditor({
           className={`p-1 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
         >
           <FaBold />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleUnderline().run()}
+          className={`p-1 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
+        >
+          <FaUnderline />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          className={`p-1 ${editor.isActive("strike") ? "bg-gray-200" : ""}`}
+        >
+          <FaStrikethrough />
         </button>
         <button
           type="button"
@@ -131,6 +166,13 @@ export default function TiptapEditor({
         </button>
         <button
           type="button"
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          className="p-1"
+        >
+          ―
+        </button>
+        <button
+          type="button"
           onClick={() => setShowUploader(true)}
           className="p-1"
         >
@@ -142,6 +184,44 @@ export default function TiptapEditor({
           className="p-1"
         >
           Слайдер
+        </button>
+        <label className="p-1 cursor-pointer">
+          <FaPalette />
+          <input
+            type="color"
+            className="hidden"
+            onChange={(e) =>
+              editor.chain().focus().setColor(e.target.value).run()
+            }
+          />
+        </label>
+        <label className="p-1 cursor-pointer">
+          <FaHighlighter />
+          <input
+            type="color"
+            className="hidden"
+            onChange={(e) =>
+              editor
+                .chain()
+                .focus()
+                .setHighlight({ color: e.target.value })
+                .run()
+            }
+          />
+        </label>
+        <button
+          type="button"
+          onClick={() => editor.chain().undo().run()}
+          className="p-1"
+        >
+          <FaUndo />
+        </button>
+        <button
+          type="button"
+          onClick={() => editor.chain().redo().run()}
+          className="p-1"
+        >
+          <FaRedo />
         </button>
         <button
           type="button"

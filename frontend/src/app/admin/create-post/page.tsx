@@ -32,7 +32,11 @@ export default function CreatePostPage() {
     <ProtectedRoute>
       <div>
         <h1 className="mb-4 text-2xl font-bold">Создать пост</h1>
-        <PostForm allTags={tags} onSubmit={handleSubmit} />
+        <PostForm
+          allTags={tags}
+          onSubmit={handleSubmit}
+          onCancel={() => router.push("/admin/posts")}
+        />
       </div>
     </ProtectedRoute>
   );
