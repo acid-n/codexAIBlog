@@ -28,6 +28,11 @@ export default function CreatePostPage() {
     router.push("/admin/posts");
   };
 
+  const handleDraft = async (data: PostFormData) => {
+    await createPost({ ...data, is_published: false });
+    alert("Черновик сохранён");
+  };
+
   return (
     <ProtectedRoute>
       <div>
@@ -35,6 +40,7 @@ export default function CreatePostPage() {
         <PostForm
           allTags={tags}
           onSubmit={handleSubmit}
+          onSaveDraft={handleDraft}
           onCancel={() => router.push("/admin/posts")}
         />
       </div>
