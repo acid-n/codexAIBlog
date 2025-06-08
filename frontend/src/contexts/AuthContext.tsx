@@ -48,17 +48,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async (token?: string) => {
       const refresh = token || refreshTokenState;
       if (!refresh) return;
-      const res = await fetch(`${API_URL}/token/refresh/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setAuthState(data.access, refresh);
-      } else {
-        logout();
-        throw new Error("Failed to refresh token");
+      try {
+        const res = await fetch(`${API_URL}/token/refresh/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          setAuthState(data.access, refresh);
+        } else {
+          logout();
+          throw new Error("Failed to refresh token");
+        }
+      } catch (err) {
+        console.error("Token refresh error", err);
+        throw err;
       }
     },
     [refreshTokenState],
@@ -92,26 +97,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function login(username: string, password: string) {
-    const res = await fetch(`${API_URL}/token/`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    const contentType = res.headers.get("content-type") || "";
-    let data: any = null;
-    if (contentType.includes("application/json")) {
-      data = await res.json();
-    } else {
-      const text = await res.text();
-      data = { detail: text };
+    try {
+      const res = await fetch(`${API_URL}/token/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const contentType = res.headers.get("content-type") || "";
+      let data: any = null;
+      if (contentType.includes("application/json")) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        data = { detail: text };
+      }
+      if (!res.ok) {
+        throw new Error(data.detail || "Login error");
+      }
+      if (!contentType.includes("application/json")) {
+        throw new Error("Invalid server response");
+      }
+      setAuthState(data.access, data.refresh);
+    } catch (err) {
+      console.error("Login error", err);
+      throw err;
     }
-    if (!res.ok) {
-      throw new Error(data.detail || "Login error");
-    }
-    if (!contentType.includes("application/json")) {
-      throw new Error("Invalid server response");
-    }
-    setAuthState(data.access, data.refresh);
   }
 
   function logout() {

@@ -8,3 +8,4 @@
 | TASK-055-editor-webp      | done   |
 | TASK-056-font-offline     | done   |
 | TASK-057-auth-bugfix      | done   |
+| TASK-058-cors-fix         | done   |
