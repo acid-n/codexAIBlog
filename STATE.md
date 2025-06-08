@@ -9,3 +9,4 @@
 | TASK-056-font-offline     | done   |
 | TASK-057-auth-bugfix      | done   |
 | TASK-058-cors-fix         | done   |
+| TASK-059-admin-nav        | done   |
