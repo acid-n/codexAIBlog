@@ -52,3 +52,6 @@ export const getPost = (slug: string) =>
   fetchWithAuth(`${API_URL}/v1/posts/${slug}/`);
 
 export const getAllTags = () => fetchWithAuth(`${API_URL}/v1/tags/`);
+
+export const deletePost = (slug: string) =>
+  fetchWithAuth(`${API_URL}/v1/posts/${slug}/`, { method: "DELETE" });

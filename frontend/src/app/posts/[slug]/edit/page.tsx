@@ -3,7 +3,12 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostForm, { PostFormData } from "../../../../components/PostForm";
 import ProtectedRoute from "../../../../components/ProtectedRoute";
-import { getPost, updatePost, getAllTags } from "../../../../lib/api";
+import {
+  getPost,
+  updatePost,
+  getAllTags,
+  deletePost,
+} from "../../../../lib/api";
 
 interface Tag {
   id: number;
@@ -29,6 +34,14 @@ export default function EditPostPage() {
     router.push("/admin/posts");
   };
 
+  const handleDelete = async () => {
+    await deletePost(params.slug);
+    await fetch(
+      `/api/revalidate?tag=posts&slug=${params.slug}&secret=${process.env.NEXT_PUBLIC_REVALIDATION_TOKEN}`,
+    );
+    router.push("/admin/posts");
+  };
+
   if (!post) {
     return <p>Загрузка...</p>;
   }
@@ -37,7 +50,13 @@ export default function EditPostPage() {
     <ProtectedRoute>
       <div>
         <h1 className="mb-4 text-2xl font-bold">Редактировать пост</h1>
-        <PostForm initialData={post} allTags={tags} onSubmit={handleSubmit} />
+        <PostForm
+          initialData={post}
+          allTags={tags}
+          onSubmit={handleSubmit}
+          onCancel={() => router.push("/admin/posts")}
+          onDelete={handleDelete}
+        />
       </div>
     </ProtectedRoute>
   );

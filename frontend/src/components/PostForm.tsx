@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -7,6 +7,8 @@ import slugify from "slugify";
 import TiptapEditor from "./tiptap-editor";
 import TagsInput from "./TagsInput";
 import ImageUploader from "./image-uploader";
+import Tooltip from "./Tooltip";
+import { FaTrash, FaTimes, FaPaperPlane } from "react-icons/fa";
 
 const schema = z.object({
   title: z.string().min(1, "Заголовок обязателен").max(80),
@@ -33,9 +35,17 @@ interface Props {
   initialData?: PostFormData;
   allTags: Tag[];
   onSubmit: (data: PostFormData) => void;
+  onCancel?: () => void;
+  onDelete?: () => void;
 }
 
-export default function PostForm({ initialData, allTags, onSubmit }: Props) {
+export default function PostForm({
+  initialData,
+  allTags,
+  onSubmit,
+  onCancel,
+  onDelete,
+}: Props) {
   const {
     register,
     control,
@@ -60,8 +70,6 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
       tags: [],
     },
   });
-
-  const [publish, setPublish] = useState(false);
 
   const title = watch("title");
   const slugValue = watch("slug");
@@ -95,7 +103,7 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
   return (
     <form
       onSubmit={handleSubmit((data) =>
-        onSubmit({ ...data, is_published: publish }),
+        onSubmit({ ...data, is_published: true }),
       )}
       className="space-y-6"
     >
@@ -233,22 +241,37 @@ export default function PostForm({ initialData, allTags, onSubmit }: Props) {
         />
       </div>
       <div className="flex gap-4">
-        <button
-          type="submit"
-          onClick={() => setPublish(false)}
-          disabled={isSubmitting}
-          className="rounded bg-gray-600 px-4 py-2 text-white disabled:opacity-50"
-        >
-          {isSubmitting ? "Сохранение..." : "Сохранить черновик"}
-        </button>
-        <button
-          type="submit"
-          onClick={() => setPublish(true)}
-          disabled={isSubmitting}
-          className="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
-        >
-          {isSubmitting ? "Сохранение..." : "Опубликовать"}
-        </button>
+        <Tooltip content="Опубликовать">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="p-2 rounded bg-blue-600 text-white disabled:opacity-50"
+          >
+            {isSubmitting ? "..." : <FaPaperPlane />}
+          </button>
+        </Tooltip>
+        {onCancel && (
+          <Tooltip content="Отмена">
+            <button
+              type="button"
+              onClick={onCancel}
+              className="p-2 rounded bg-gray-500 text-white"
+            >
+              <FaTimes />
+            </button>
+          </Tooltip>
+        )}
+        {onDelete && (
+          <Tooltip content="Удалить">
+            <button
+              type="button"
+              onClick={onDelete}
+              className="p-2 rounded bg-red-600 text-white"
+            >
+              <FaTrash />
+            </button>
+          </Tooltip>
+        )}
       </div>
     </form>
   );
