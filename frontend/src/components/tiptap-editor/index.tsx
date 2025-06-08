@@ -34,6 +34,8 @@ export default function TiptapEditor({
   const [showUploader, setShowUploader] = useState(false);
   const [showSliderUploader, setShowSliderUploader] = useState(false);
   const editor = useEditor({
+    // решение проблемы гидратации SSR в TipTap
+    immediatelyRender: false,
     extensions: [
       StarterKit,
       Underline,
