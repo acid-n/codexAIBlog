@@ -34,6 +34,11 @@ export default function EditPostPage() {
     router.push("/admin/posts");
   };
 
+  const handleDraft = async (data: PostFormData) => {
+    await updatePost(params.slug, { ...data, is_published: false });
+    alert("Черновик обновлён");
+  };
+
   const handleDelete = async () => {
     await deletePost(params.slug);
     await fetch(
@@ -54,6 +59,7 @@ export default function EditPostPage() {
           initialData={post}
           allTags={tags}
           onSubmit={handleSubmit}
+          onSaveDraft={handleDraft}
           onCancel={() => router.push("/admin/posts")}
           onDelete={handleDelete}
         />

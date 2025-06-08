@@ -8,7 +8,7 @@ import TiptapEditor from "./tiptap-editor";
 import TagsInput from "./TagsInput";
 import ImageUploader from "./image-uploader";
 import Tooltip from "./Tooltip";
-import { FaTrash, FaTimes, FaPaperPlane } from "react-icons/fa";
+import { FaTrash, FaTimes, FaPaperPlane, FaSave } from "react-icons/fa";
 
 const schema = z.object({
   title: z.string().min(1, "Заголовок обязателен").max(80),
@@ -35,6 +35,7 @@ interface Props {
   initialData?: PostFormData;
   allTags: Tag[];
   onSubmit: (data: PostFormData) => void;
+  onSaveDraft?: (data: PostFormData) => void;
   onCancel?: () => void;
   onDelete?: () => void;
 }
@@ -43,6 +44,7 @@ export default function PostForm({
   initialData,
   allTags,
   onSubmit,
+  onSaveDraft,
   onCancel,
   onDelete,
 }: Props) {
@@ -241,6 +243,18 @@ export default function PostForm({
         />
       </div>
       <div className="flex gap-4">
+        {onSaveDraft && (
+          <Tooltip content="Сохранить черновик">
+            <button
+              type="button"
+              onClick={handleSubmit((d) => onSaveDraft({ ...d, is_published: false }))}
+              disabled={isSubmitting}
+              className="p-2 rounded bg-yellow-600 text-white disabled:opacity-50"
+            >
+              {isSubmitting ? "..." : <FaSave />}
+            </button>
+          </Tooltip>
+        )}
         <Tooltip content="Опубликовать">
           <button
             type="submit"

@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { PlusCircle, LogOut, User } from "lucide-react";
+import { PlusCircle, LogOut, User, Home, File } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import Tooltip from "./Tooltip";
 
@@ -22,9 +22,23 @@ export default function AdminNav() {
           </Tooltip>
         </li>
         <li>
+          <Tooltip content="Главная">
+            <Link href="/" aria-label="Главная">
+              <Home className="w-5 h-5" />
+            </Link>
+          </Tooltip>
+        </li>
+        <li>
           <Tooltip content="Создать пост">
             <Link href="/admin/create-post" aria-label="Создать пост">
               <PlusCircle className="w-5 h-5" />
+            </Link>
+          </Tooltip>
+        </li>
+        <li>
+          <Tooltip content="Черновики">
+            <Link href="/admin/drafts" aria-label="Черновики">
+              <File className="w-5 h-5" />
             </Link>
           </Tooltip>
         </li>
