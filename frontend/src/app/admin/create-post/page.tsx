@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import PostForm, { PostFormData } from "../../../components/PostForm";
 import ProtectedRoute from "../../../components/ProtectedRoute";
 import { createPost, getAllTags } from "../../../lib/api";
+import { logger } from "../../../lib/logger";
 import { useRouter } from "next/navigation";
 
 interface Tag {
@@ -11,13 +12,19 @@ interface Tag {
 }
 
 export default function CreatePostPage() {
+  const showTags = process.env.NEXT_PUBLIC_SHOW_TAGS !== "false";
   const [tags, setTags] = useState<Tag[]>([]);
   const router = useRouter();
 
   useEffect(() => {
+    if (!showTags) return;
     getAllTags()
       .then(setTags)
-      .catch(() => setTags([]));
+      .catch((e) => {
+        logger.error("Не удалось получить теги", e);
+        setTags([]);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleSubmit = async (data: PostFormData) => {
