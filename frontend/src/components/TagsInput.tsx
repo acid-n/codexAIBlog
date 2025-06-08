@@ -18,6 +18,9 @@ export default function TagsInput({
   onChange,
 }: TagsInputProps) {
   const [query, setQuery] = useState("");
+  if (available.length === 0) {
+    return <p className="text-red-500">Теги не загрузились</p>;
+  }
   const filtered = available.filter(
     (t) =>
       t.name.toLowerCase().includes(query.toLowerCase()) &&

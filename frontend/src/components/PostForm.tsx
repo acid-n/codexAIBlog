@@ -48,6 +48,7 @@ export default function PostForm({
   onCancel,
   onDelete,
 }: Props) {
+  const showTags = process.env.NEXT_PUBLIC_SHOW_TAGS !== "false";
   const {
     register,
     control,
@@ -175,14 +176,16 @@ export default function PostForm({
           )}
         />
       </div>
-      <div>
-        <label className="block mb-1">Теги</label>
-        <TagsInput
-          available={allTags}
-          value={tags}
-          onChange={(ids) => setValue("tags", ids)}
-        />
-      </div>
+      {showTags && (
+        <div>
+          <label className="block mb-1">Теги</label>
+          <TagsInput
+            available={allTags}
+            value={tags}
+            onChange={(ids) => setValue("tags", ids)}
+          />
+        </div>
+      )}
       <div className="flex items-center gap-4">
         <label className="flex items-center gap-2">
           <input type="checkbox" {...register("sitemap_include")} /> В Sitemap
@@ -247,7 +250,9 @@ export default function PostForm({
           <Tooltip content="Сохранить черновик">
             <button
               type="button"
-              onClick={handleSubmit((d) => onSaveDraft({ ...d, is_published: false }))}
+              onClick={handleSubmit((d) =>
+                onSaveDraft({ ...d, is_published: false }),
+              )}
               disabled={isSubmitting}
               className="p-2 rounded bg-yellow-600 text-white disabled:opacity-50"
             >

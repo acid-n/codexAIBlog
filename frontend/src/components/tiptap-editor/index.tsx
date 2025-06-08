@@ -5,8 +5,6 @@ import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
-import Strike from "@tiptap/extension-strike";
-import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import Placeholder from "@tiptap/extension-placeholder";
 import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
@@ -51,14 +49,12 @@ export default function TiptapEditor({
     extensions: [
       StarterKit,
       Underline,
-      Strike,
       Color,
       TextStyle,
       Highlight,
       Image,
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
-      HorizontalRule,
       Placeholder.configure({
         placeholder: "Начните писать ваш пост...",
       }),

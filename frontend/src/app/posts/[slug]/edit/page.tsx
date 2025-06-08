@@ -9,6 +9,7 @@ import {
   getAllTags,
   deletePost,
 } from "../../../../lib/api";
+import { logger } from "../../../../lib/logger";
 
 interface Tag {
   id: number;
@@ -16,14 +17,23 @@ interface Tag {
 }
 
 export default function EditPostPage() {
+  const showTags = process.env.NEXT_PUBLIC_SHOW_TAGS !== "false";
   const params = useParams<{ slug: string }>()!;
   const [post, setPost] = useState<PostFormData | null>(null);
   const [tags, setTags] = useState<Tag[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    getAllTags().then(setTags);
+    if (showTags) {
+      getAllTags()
+        .then(setTags)
+        .catch((e) => {
+          logger.error("Не удалось получить теги", e);
+          setTags([]);
+        });
+    }
     getPost(params.slug).then(setPost);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
 
   const handleSubmit = async (data: PostFormData) => {

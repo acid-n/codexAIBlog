@@ -14,3 +14,4 @@
 | TASK-006                  | done   |
 | TASK-060-tiptap-ssr       | done   |
 | TASK-061-rich-editor      | done   |
+| TASK-062-tag-fetch-fix    | done   |

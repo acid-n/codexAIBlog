@@ -15,8 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-from blog.views import (PostViewSet, StaffTokenObtainPairView, TagViewSet,
-                        check_token)
+from blog.views import PostViewSet, StaffTokenObtainPairView, TagViewSet, check_token
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
@@ -29,6 +28,7 @@ router.register("tags", TagViewSet)
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include((router.urls, "api"))),
+    path("api/v1/", include((router.urls, "api-v1"))),
     path("api/token/", StaffTokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path("api/check/", check_token, name="check_token"),
