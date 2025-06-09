@@ -16,3 +16,4 @@
 | TASK-061-rich-editor        | done   |
 | TASK-062-tag-fetch-fix      | done   |
 | TASK-063-tag-input-fallback | done   |
+| TASK-064-editor-finalization | done   |

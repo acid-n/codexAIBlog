@@ -12,8 +12,17 @@ body {
 }
 
 .image-slider {
-  @apply flex overflow-x-auto gap-2 snap-x snap-mandatory;
+  @apply relative flex overflow-x-auto gap-2 snap-x snap-mandatory;
 }
 .image-slider img {
   @apply flex-shrink-0 w-full snap-center;
+}
+.image-slider button {
+  @apply absolute top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white p-1;
+}
+.image-slider button.prev {
+  @apply left-1;
+}
+.image-slider button.next {
+  @apply right-1;
 }
