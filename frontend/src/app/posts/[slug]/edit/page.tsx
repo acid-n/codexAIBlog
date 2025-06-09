@@ -3,35 +3,14 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import PostForm, { PostFormData } from "../../../../components/PostForm";
 import ProtectedRoute from "../../../../components/ProtectedRoute";
-import {
-  getPost,
-  updatePost,
-  getAllTags,
-  deletePost,
-} from "../../../../lib/api";
-import { logger } from "../../../../lib/logger";
-
-interface Tag {
-  id: number;
-  name: string;
-}
+import { getPost, updatePost, deletePost } from "../../../../lib/api";
 
 export default function EditPostPage() {
-  const showTags = process.env.NEXT_PUBLIC_SHOW_TAGS !== "false";
   const params = useParams<{ slug: string }>()!;
   const [post, setPost] = useState<PostFormData | null>(null);
-  const [tags, setTags] = useState<Tag[]>([]);
   const router = useRouter();
 
   useEffect(() => {
-    if (showTags) {
-      getAllTags()
-        .then(setTags)
-        .catch((e) => {
-          logger.error("Не удалось получить теги", e);
-          setTags([]);
-        });
-    }
     getPost(params.slug).then(setPost);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.slug]);
@@ -67,7 +46,6 @@ export default function EditPostPage() {
         <h1 className="mb-4 text-2xl font-bold">Редактировать пост</h1>
         <PostForm
           initialData={post}
-          allTags={tags}
           onSubmit={handleSubmit}
           onSaveDraft={handleDraft}
           onCancel={() => router.push("/admin/posts")}
