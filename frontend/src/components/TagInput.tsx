@@ -1,27 +1,29 @@
 "use client";
 import { useState } from "react";
+import { useTags } from "../hooks/useTags";
+import { logger } from "../lib/logger";
 
 interface Tag {
   id: number;
   name: string;
 }
 
-interface TagsInputProps {
-  available: Tag[];
+interface Props {
   value: number[];
   onChange: (value: number[]) => void;
 }
 
-export default function TagsInput({
-  available,
-  value,
-  onChange,
-}: TagsInputProps) {
+export default function TagInput({ value, onChange }: Props) {
+  const enabled = process.env.NEXT_PUBLIC_ENABLE_TAGS !== "false";
+  const { tags, loading, error } = useTags(enabled);
   const [query, setQuery] = useState("");
-  if (available.length === 0) {
-    return <p className="text-red-500">Теги не загрузились</p>;
+
+  if (!enabled) {
+    logger.info("Tag input disabled via NEXT_PUBLIC_ENABLE_TAGS");
+    return null;
   }
-  const filtered = available.filter(
+
+  const filtered = tags.filter(
     (t) =>
       t.name.toLowerCase().includes(query.toLowerCase()) &&
       !value.includes(t.id),
@@ -39,7 +41,7 @@ export default function TagsInput({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
-      const tag = available.find(
+      const tag = tags.find(
         (t) => t.name.toLowerCase() === query.toLowerCase().trim(),
       );
       if (tag) {
@@ -52,7 +54,7 @@ export default function TagsInput({
     <div>
       <div className="flex flex-wrap gap-2 mb-2">
         {value.map((id) => {
-          const tag = available.find((t) => t.id === id);
+          const tag = tags.find((t) => t.id === id);
           if (!tag) return null;
           return (
             <span
@@ -71,15 +73,22 @@ export default function TagsInput({
           );
         })}
       </div>
-      <input
-        type="text"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        onKeyDown={handleKeyDown}
-        className="w-full border rounded p-2"
-        placeholder="Добавить тег"
-        list="tags-suggestions"
-      />
+      {loading ? (
+        <div className="w-full h-9 bg-gray-200 rounded animate-pulse" />
+      ) : (
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="w-full border rounded p-2"
+          placeholder="Добавить тег"
+          list="tags-suggestions"
+        />
+      )}
+      {!loading && error && (
+        <p className="mt-1 text-sm text-red-500">⚠️ Теги не загрузились</p>
+      )}
       <datalist id="tags-suggestions">
         {filtered.map((tag) => (
           <option key={tag.id} value={tag.name} />

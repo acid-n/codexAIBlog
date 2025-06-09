@@ -5,7 +5,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import slugify from "slugify";
 import TiptapEditor from "./tiptap-editor";
-import TagsInput from "./TagsInput";
+import TagInput from "./TagInput";
+import { logger } from "../lib/logger";
 import ImageUploader from "./image-uploader";
 import Tooltip from "./Tooltip";
 import { FaTrash, FaTimes, FaPaperPlane, FaSave } from "react-icons/fa";
@@ -33,7 +34,6 @@ interface Tag {
 }
 interface Props {
   initialData?: PostFormData;
-  allTags: Tag[];
   onSubmit: (data: PostFormData) => void;
   onSaveDraft?: (data: PostFormData) => void;
   onCancel?: () => void;
@@ -42,13 +42,15 @@ interface Props {
 
 export default function PostForm({
   initialData,
-  allTags,
   onSubmit,
   onSaveDraft,
   onCancel,
   onDelete,
 }: Props) {
-  const showTags = process.env.NEXT_PUBLIC_SHOW_TAGS !== "false";
+  const showTags = process.env.NEXT_PUBLIC_ENABLE_TAGS !== "false";
+  if (!showTags) {
+    logger.info("Tag input disabled via NEXT_PUBLIC_ENABLE_TAGS");
+  }
   const {
     register,
     control,
@@ -179,11 +181,7 @@ export default function PostForm({
       {showTags && (
         <div>
           <label className="block mb-1">Теги</label>
-          <TagsInput
-            available={allTags}
-            value={tags}
-            onChange={(ids) => setValue("tags", ids)}
-          />
+          <TagInput value={tags} onChange={(ids) => setValue("tags", ids)} />
         </div>
       )}
       <div className="flex items-center gap-4">
