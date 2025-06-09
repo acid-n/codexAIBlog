@@ -10,6 +10,21 @@ import Color from "@tiptap/extension-color";
 import TextStyle from "@tiptap/extension-text-style";
 import Highlight from "@tiptap/extension-highlight";
 import Slider from "./slider";
+import Tooltip from "../Tooltip";
+
+const ImageWithSize = Image.extend({
+  addAttributes() {
+    return {
+      ...this.parent?.(),
+      width: {
+        default: null,
+        parseHTML: (element) => element.getAttribute("width"),
+        renderHTML: (attributes) =>
+          attributes.width ? { width: attributes.width } : {},
+      },
+    };
+  },
+});
 import { useEffect, useState } from "react";
 import {
   FaBold,
@@ -29,6 +44,31 @@ import {
   FaHighlighter,
 } from "react-icons/fa";
 import ImageUploader from "../image-uploader";
+
+function MenuButton({
+  onClick,
+  active,
+  label,
+  children,
+}: {
+  onClick: () => void;
+  active?: boolean;
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Tooltip content={label}>
+      <button
+        type="button"
+        aria-label={label}
+        onClick={onClick}
+        className={`p-1 ${active ? "bg-gray-200" : ""}`}
+      >
+        {children}
+      </button>
+    </Tooltip>
+  );
+}
 
 interface Props {
   content: any;
@@ -52,7 +92,7 @@ export default function TiptapEditor({
       Color,
       TextStyle,
       Highlight,
-      Image,
+      ImageWithSize,
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({
@@ -76,111 +116,99 @@ export default function TiptapEditor({
   if (!editor) return null;
 
   const insertImage = (url: string) => {
-    const alt = prompt("Alt text") || "";
-    editor.chain().focus().setImage({ src: url, alt }).run();
+    const alt = prompt("Описание") || "";
+    const width = prompt("Ширина (%)", "100") || "100";
+    editor
+      .chain()
+      .focus()
+      .setImage({ src: url, alt, width } as any)
+      .run();
   };
 
   const insertSlider = (urls: string[]) => {
-    editor.commands.setSlider(urls);
+    const delay = Number(prompt("Задержка между слайдами (мс)", "3000") || 3000);
+    const autoplay = confirm("Автопрокрутка?");
+    editor.commands.setSlider({ images: urls, delay, autoplay });
   };
 
   return (
     <div>
       <div className="flex flex-wrap gap-1 mb-2 border-b pb-2">
-        <button
-          type="button"
+        <MenuButton
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`p-1 ${editor.isActive("bold") ? "bg-gray-200" : ""}`}
+          active={editor.isActive("bold")}
+          label="Полужирный"
         >
           <FaBold />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`p-1 ${editor.isActive("underline") ? "bg-gray-200" : ""}`}
+          active={editor.isActive("underline")}
+          label="Подчёркнутый"
         >
           <FaUnderline />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`p-1 ${editor.isActive("strike") ? "bg-gray-200" : ""}`}
+          active={editor.isActive("strike")}
+          label="Зачёркнутый"
         >
           <FaStrikethrough />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`p-1 ${editor.isActive("italic") ? "bg-gray-200" : ""}`}
+          active={editor.isActive("italic")}
+          label="Курсив"
         >
           <FaItalic />
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
-          className={`p-1 ${
-            editor.isActive("heading", { level: 2 }) ? "bg-gray-200" : ""
-          }`}
+        </MenuButton>
+        <MenuButton
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          active={editor.isActive("heading", { level: 2 })}
+          label="Заголовок H2"
         >
           <FaHeading />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`p-1 ${
-            editor.isActive("bulletList") ? "bg-gray-200" : ""
-          }`}
+          active={editor.isActive("bulletList")}
+          label="Маркированный список"
         >
           <FaListUl />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`p-1 ${
-            editor.isActive("orderedList") ? "bg-gray-200" : ""
-          }`}
+          active={editor.isActive("orderedList")}
+          label="Нумерованный список"
         >
           <FaListOl />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`p-1 ${
-            editor.isActive("blockquote") ? "bg-gray-200" : ""
-          }`}
+          active={editor.isActive("blockquote")}
+          label="Цитата"
         >
           <FaQuoteRight />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-          className={`p-1 ${editor.isActive("codeBlock") ? "bg-gray-200" : ""}`}
+          active={editor.isActive("codeBlock")}
+          label="Код"
         >
           <FaCode />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="p-1"
+          label="Разделитель"
         >
           ―
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowUploader(true)}
-          className="p-1"
-        >
+        </MenuButton>
+        <MenuButton onClick={() => setShowUploader(true)} label="Изображение">
           <FaImage />
-        </button>
-        <button
-          type="button"
-          onClick={() => setShowSliderUploader(true)}
-          className="p-1"
-        >
+        </MenuButton>
+        <MenuButton onClick={() => setShowSliderUploader(true)} label="Слайдер">
           Слайдер
-        </button>
+        </MenuButton>
         <label className="p-1 cursor-pointer">
           <FaPalette />
           <input
@@ -205,22 +233,13 @@ export default function TiptapEditor({
             }
           />
         </label>
-        <button
-          type="button"
-          onClick={() => editor.chain().undo().run()}
-          className="p-1"
-        >
+        <MenuButton onClick={() => editor.chain().undo().run()} label="Отменить">
           <FaUndo />
-        </button>
-        <button
-          type="button"
-          onClick={() => editor.chain().redo().run()}
-          className="p-1"
-        >
+        </MenuButton>
+        <MenuButton onClick={() => editor.chain().redo().run()} label="Повторить">
           <FaRedo />
-        </button>
-        <button
-          type="button"
+        </MenuButton>
+        <MenuButton
           onClick={() => {
             const url = prompt("Введите URL", "http://");
             if (url)
@@ -231,14 +250,14 @@ export default function TiptapEditor({
                 .setLink({ href: url })
                 .run();
           }}
-          className="p-1"
+          label="Ссылка"
         >
           <FaLink />
-        </button>
+        </MenuButton>
       </div>
       <EditorContent
         editor={editor}
-        className="border rounded p-2 min-h-[300px] resize-y"
+        className="p-2 min-h-[300px] resize-y focus:outline-none"
       />
       {showUploader && (
         <div className="mt-2">

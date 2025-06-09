@@ -7,7 +7,9 @@ export interface SliderOptions {
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
     slider: {
-      setSlider: (images: string[]) => ReturnType;
+      setSlider: (
+        opts: { images: string[]; delay: number; autoplay: boolean },
+      ) => ReturnType;
     };
   }
 }
@@ -28,6 +30,12 @@ export const Slider = Node.create<SliderOptions>({
       images: {
         default: [],
       },
+      delay: {
+        default: 3000,
+      },
+      autoplay: {
+        default: false,
+      },
     };
   },
 
@@ -43,25 +51,40 @@ export const Slider = Node.create<SliderOptions>({
     return [
       "div",
       mergeAttributes(
-        { "data-type": "slider", class: "image-slider" },
+        {
+          "data-type": "slider",
+          class: "image-slider",
+          "data-delay": (HTMLAttributes as any).delay,
+          "data-autoplay": (HTMLAttributes as any).autoplay,
+        },
         this.options.HTMLAttributes,
         HTMLAttributes,
       ),
+      [
+        "button",
+        { class: "prev", "data-action": "prev" },
+        "‹",
+      ],
       ...((HTMLAttributes as any).images || []).map((src: string) => [
         "img",
         { src },
       ]),
+      [
+        "button",
+        { class: "next", "data-action": "next" },
+        "›",
+      ],
     ];
   },
 
   addCommands() {
     return {
       setSlider:
-        (images: string[]) =>
+        (opts: { images: string[]; delay: number; autoplay: boolean }) =>
         ({ commands }) => {
           return commands.insertContent({
             type: this.name,
-            attrs: { images },
+            attrs: opts,
           });
         },
     };

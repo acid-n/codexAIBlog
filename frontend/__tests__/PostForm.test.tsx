@@ -7,7 +7,7 @@ describe("PostForm", () => {
     const user = userEvent.setup();
     process.env.NEXT_PUBLIC_ENABLE_TAGS = "false";
     render(<PostForm onSubmit={() => {}} />);
-    const titleInput = screen.getByLabelText(/заголовок/i);
+    const titleInput = screen.getAllByLabelText(/заголовок/i)[0];
     await user.type(titleInput, "Тестовый пост");
     expect(screen.getByLabelText(/slug/i)).toHaveValue("testovyj-post");
   });
